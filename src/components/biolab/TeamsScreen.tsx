@@ -22,35 +22,37 @@ export default function TeamsScreen({ onNext, onBack }: TeamsScreenProps) {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center py-16">
+    <div className="min-h-screen flex flex-col justify-center py-20 biolab-grid-pattern">
       <div className="biolab-container">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
-          <span className="biolab-badge mb-4 inline-block">Paso 1</span>
-          <h2 className="biolab-section-title mb-4">Forma tu equipo</h2>
-          <p className="biolab-subtitle">Crea equipos de 3-5 personas para la sesión</p>
+          <span className="biolab-phase mb-5 inline-flex">Fase 01</span>
+          <h2 className="biolab-section-title mb-3">Configuración de equipos</h2>
+          <p className="biolab-subtitle">Grupos de 3-5 personas por equipo</p>
         </motion.div>
 
-        <div className="max-w-2xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="biolab-card mb-8">
-            <div className="flex flex-col sm:flex-row gap-4">
+        <div className="max-w-xl mx-auto">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="biolab-card mb-8">
+            <label className="biolab-label block mb-3">Nuevo equipo</label>
+            <div className="flex gap-3">
               <input
                 type="text"
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleAdd()}
-                placeholder="Nombre del equipo..."
-                className="flex-1 px-5 py-4 rounded-xl bg-secondary border border-border text-foreground text-lg font-body placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                placeholder="Nombre del equipo"
+                className="biolab-input flex-1 text-base"
               />
-              <button onClick={handleAdd} className="biolab-btn-primary shrink-0">
-                + Añadir
+              <button onClick={handleAdd} className="biolab-btn-primary shrink-0 px-6 py-3">
+                Añadir
               </button>
             </div>
-            <div className="flex gap-3 mt-4">
+            <div className="flex gap-2.5 mt-4">
+              <span className="biolab-label self-center mr-1">Color</span>
               {TEAM_COLORS.map((c, i) => (
                 <button
                   key={c.name}
                   onClick={() => setSelectedColor(i)}
-                  className={`w-10 h-10 rounded-full border-2 transition-all ${i === selectedColor ? "border-foreground scale-110" : "border-transparent"}`}
+                  className={`w-8 h-8 rounded-lg border-2 transition-all ${i === selectedColor ? "border-foreground scale-110 shadow-md" : "border-transparent opacity-70 hover:opacity-100"}`}
                   style={{ background: c.value }}
                   title={c.name}
                 />
@@ -65,22 +67,22 @@ export default function TeamsScreen({ onNext, onBack }: TeamsScreenProps) {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
-                className={`biolab-card mb-4 cursor-pointer transition-all ${i === activeTeamIndex ? "ring-2 ring-primary" : ""}`}
+                className={`biolab-card-interactive mb-3 ${i === activeTeamIndex ? "ring-2 ring-primary border-primary/30" : ""}`}
                 onClick={() => setActiveTeam(i)}
               >
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full" style={{ background: team.color }} />
+                  <div className="flex items-center gap-3.5">
+                    <div className="w-8 h-8 rounded-lg" style={{ background: team.color }} />
                     <div>
-                      <h3 className="text-lg font-semibold font-display text-foreground">{team.name}</h3>
-                      {i === activeTeamIndex && <span className="text-xs text-muted-foreground">Equipo activo</span>}
+                      <h3 className="text-base font-semibold font-display text-foreground">{team.name}</h3>
+                      {i === activeTeamIndex && <span className="biolab-label text-primary">Activo</span>}
                     </div>
                   </div>
                   <button
                     onClick={(e) => { e.stopPropagation(); removeTeam(i); }}
-                    className="text-muted-foreground hover:text-destructive transition-colors text-xl px-2"
+                    className="text-muted-foreground hover:text-destructive transition-colors w-8 h-8 flex items-center justify-center rounded-lg hover:bg-destructive/10"
                   >
-                    ×
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
                   </button>
                 </div>
               </motion.div>
@@ -88,14 +90,17 @@ export default function TeamsScreen({ onNext, onBack }: TeamsScreenProps) {
           </AnimatePresence>
 
           {teams.length === 0 && (
-            <p className="text-center text-muted-foreground py-8">Aún no hay equipos. ¡Crea el primero!</p>
+            <div className="text-center py-12 text-muted-foreground">
+              <p className="text-sm">Aún no hay equipos registrados</p>
+            </div>
           )}
         </div>
 
         <div className="flex justify-center gap-4 mt-12">
-          <button onClick={onBack} className="px-6 py-3 rounded-xl text-muted-foreground hover:text-foreground transition-colors font-medium">← Volver</button>
+          <button onClick={onBack} className="biolab-btn-ghost">← Volver</button>
           <button onClick={onNext} className="biolab-btn-primary" disabled={teams.length === 0}>
-            Descubrir reto →
+            Asignar retos
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
           </button>
         </div>
       </div>

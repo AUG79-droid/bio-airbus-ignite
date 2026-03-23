@@ -16,46 +16,96 @@ export default function WelcomeScreen({ onNext }: WelcomeScreenProps) {
         height={1080}
       />
       <div className="absolute inset-0 biolab-hero-overlay" />
+      <div className="absolute inset-0 biolab-grid-pattern-dark" />
+
+      {/* Top bar */}
+      <div className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between px-8 py-6">
+        <div className="flex items-center gap-2 opacity-60">
+          <div className="w-1.5 h-1.5 rounded-full bg-current" style={{ color: "hsl(45, 95%, 52%)" }} />
+          <span className="font-mono-label" style={{ color: "hsl(210, 15%, 65%)" }}>BioLab Workshop System v1.0</span>
+        </div>
+        <span className="font-mono-label" style={{ color: "hsl(210, 15%, 50%)" }}>Airbus Innovation Lab</span>
+      </div>
 
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        className="relative z-10 text-center max-w-3xl mx-auto px-6"
+        transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+        className="relative z-10 text-center max-w-4xl mx-auto px-8"
       >
+        {/* Phase tag */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
-          className="mb-6"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4, duration: 0.8 }}
+          className="mb-8"
         >
-          <span className="biolab-badge text-base">Sesión de innovación</span>
+          <span
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-md text-xs font-mono uppercase tracking-[0.15em] border"
+            style={{
+              color: "hsl(45, 95%, 65%)",
+              borderColor: "hsl(45, 95%, 52%, 0.2)",
+              background: "hsl(45, 95%, 52%, 0.06)",
+            }}
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
+            Sesión de innovación biomimética
+          </span>
         </motion.div>
 
-        <h1 className="text-5xl md:text-7xl font-bold text-primary-foreground mb-6 font-display tracking-tight">
-          BioLab{" "}
-          <span className="text-gradient-accent">Airbus</span>
+        {/* Title */}
+        <h1 className="font-display font-bold tracking-tight mb-6" style={{ color: "hsl(0, 0%, 98%)" }}>
+          <span className="block text-5xl md:text-7xl lg:text-8xl">BioLab</span>
+          <span className="block text-5xl md:text-7xl lg:text-8xl text-gradient-accent mt-1">Airbus</span>
         </h1>
 
-        <p className="text-xl md:text-2xl text-primary-foreground/80 font-light mb-4 max-w-2xl mx-auto leading-relaxed">
-          Conecta los principios de la naturaleza con los retos de la aeronáutica.
+        {/* Divider */}
+        <motion.div
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{ delay: 0.6, duration: 0.8 }}
+          className="mx-auto mb-8 h-px w-48"
+          style={{ background: "linear-gradient(90deg, transparent, hsl(45, 95%, 52%, 0.4), transparent)" }}
+        />
+
+        <p className="text-lg md:text-xl font-light mb-3 max-w-2xl mx-auto leading-relaxed" style={{ color: "hsl(210, 15%, 75%)" }}>
+          Conecta principios de la naturaleza con retos reales de ingeniería aeronáutica, operaciones de planta y mantenimiento.
         </p>
 
-        <p className="text-base text-primary-foreground/60 mb-12 max-w-xl mx-auto">
-          <strong className="text-primary-foreground/80">Biomímesis</strong>: innovación inspirada en 3.800 millones de años de evolución. Observa, aprende y aplica las estrategias de la naturaleza para resolver retos reales.
+        <p className="text-sm mb-14 max-w-lg mx-auto" style={{ color: "hsl(210, 15%, 50%)" }}>
+          3.800 millones de años de I+D evolutivo aplicados a la innovación industrial.
         </p>
 
         <motion.button
-          whileHover={{ scale: 1.03 }}
+          whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={onNext}
-          className="biolab-btn-accent text-xl px-12 py-5"
+          className="biolab-btn-accent text-lg px-14 py-5"
         >
-          Comenzar experiencia
-          <svg className="w-6 h-6 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+          Iniciar sesión
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
           </svg>
         </motion.button>
+
+        {/* Bottom details */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2 }}
+          className="mt-16 flex items-center justify-center gap-8"
+        >
+          {[
+            { n: "6", label: "fases" },
+            { n: "8", label: "retos" },
+            { n: "10", label: "organismos" },
+          ].map((stat) => (
+            <div key={stat.label} className="text-center">
+              <span className="block text-2xl font-display font-bold" style={{ color: "hsl(45, 95%, 60%)" }}>{stat.n}</span>
+              <span className="font-mono-label" style={{ color: "hsl(210, 15%, 45%)" }}>{stat.label}</span>
+            </div>
+          ))}
+        </motion.div>
       </motion.div>
     </div>
   );

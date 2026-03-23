@@ -8,62 +8,96 @@ interface PitchScreenProps {
 
 export default function PitchScreen({ onNext, onBack }: PitchScreenProps) {
   const { activeTeam, updatePitch } = useBioLab();
-
   if (!activeTeam) return null;
 
+  const canvasPreview = [
+    { label: "Reto", value: activeTeam.challenge?.title },
+    { label: "Modelo biológico", value: activeTeam.organism?.name },
+    { label: "Principio", value: activeTeam.organism?.principle },
+    { label: "Solución", value: activeTeam.canvas.solution },
+    { label: "Impacto", value: activeTeam.canvas.benefit },
+  ];
+
   return (
-    <div className="min-h-screen flex flex-col justify-center py-16">
+    <div className="min-h-screen flex flex-col justify-center py-20 biolab-grid-pattern">
       <div className="biolab-container">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
-          <span className="biolab-badge mb-4 inline-block">Paso 6a</span>
-          <h2 className="biolab-section-title mb-4">Prepara tu pitch</h2>
+          <span className="biolab-phase mb-5 inline-flex">Fase 06a — Presentación</span>
+          <h2 className="biolab-section-title mb-3">Pitch final</h2>
           <p className="biolab-subtitle">
-            Equipo <strong style={{ color: activeTeam.color }}>{activeTeam.name}</strong>: resume tu idea para presentarla
+            Equipo <strong className="text-foreground">{activeTeam.name}</strong> — Sintetiza tu propuesta en un pitch de 60 segundos
           </p>
         </motion.div>
 
-        <div className="max-w-2xl mx-auto">
-          {/* Resumen visual */}
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-            className="biolab-card mb-6 border-primary/20"
-            style={{ background: "linear-gradient(135deg, hsl(var(--primary) / 0.03), hsl(var(--accent) / 0.03))" }}
+        <div className="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-6">
+          {/* Canvas summary sidebar */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.1 }}
+            className="md:col-span-2"
           >
-            <h3 className="font-semibold font-display text-foreground mb-4">📋 Resumen de tu canvas</h3>
-            <div className="space-y-3 text-sm">
-              <div><span className="text-muted-foreground">Reto:</span> <span className="text-foreground font-medium">{activeTeam.challenge?.title ?? "—"}</span></div>
-              <div><span className="text-muted-foreground">Inspiración:</span> <span className="text-foreground font-medium">{activeTeam.organism?.name ?? "—"}</span></div>
-              <div><span className="text-muted-foreground">Solución:</span> <span className="text-foreground font-medium">{activeTeam.canvas.solution || "—"}</span></div>
-              <div><span className="text-muted-foreground">Beneficio:</span> <span className="text-foreground font-medium">{activeTeam.canvas.benefit || "—"}</span></div>
+            <div className="biolab-card h-full">
+              <h3 className="biolab-label mb-4">Resumen del canvas</h3>
+              <div className="space-y-4">
+                {canvasPreview.map((item) => (
+                  <div key={item.label}>
+                    <span className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground/70">{item.label}</span>
+                    <p className="text-sm text-foreground mt-0.5 leading-relaxed">{item.value || "—"}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="biolab-card mb-6">
-            <label className="block font-semibold font-display text-foreground mb-2">🏷️ Nombre de tu idea</label>
-            <input
-              type="text"
-              value={activeTeam.pitchTitle}
-              onChange={(e) => updatePitch(e.target.value, activeTeam.pitchSummary)}
-              placeholder="Un nombre memorable para tu propuesta..."
-              className="w-full bg-secondary/50 border border-border rounded-xl px-5 py-4 text-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary font-body"
-            />
-          </motion.div>
+          {/* Pitch form */}
+          <div className="md:col-span-3 space-y-5">
+            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="biolab-card">
+              <label className="biolab-label block mb-3">Nombre de la propuesta</label>
+              <input
+                type="text"
+                value={activeTeam.pitchTitle}
+                onChange={(e) => updatePitch(e.target.value, activeTeam.pitchSummary)}
+                placeholder="Un nombre técnico y memorable"
+                className="biolab-input text-lg font-display font-semibold"
+              />
+            </motion.div>
 
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="biolab-card mb-8">
-            <label className="block font-semibold font-display text-foreground mb-2">🎤 Elevator pitch (30 segundos)</label>
-            <textarea
-              value={activeTeam.pitchSummary}
-              onChange={(e) => updatePitch(activeTeam.pitchTitle, e.target.value)}
-              placeholder="Inspirados en [organismo], proponemos [solución] para [reto] porque..."
-              rows={5}
-              className="w-full bg-secondary/50 border border-border rounded-xl px-5 py-4 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary resize-none font-body"
-            />
-          </motion.div>
+            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="biolab-card">
+              <div className="flex items-center justify-between mb-3">
+                <label className="biolab-label">Elevator pitch</label>
+                <span className="font-mono text-[10px] text-muted-foreground">~60 segundos</span>
+              </div>
+              <textarea
+                value={activeTeam.pitchSummary}
+                onChange={(e) => updatePitch(activeTeam.pitchTitle, e.target.value)}
+                placeholder={"Hemos observado que [organismo] resuelve [problema natural] mediante [principio]. Proponemos aplicar este principio a [reto Airbus] desarrollando [solución concreta], lo que permitiría [beneficio cuantificable]. El primer paso sería [acción de validación]."}
+                rows={7}
+                className="biolab-input resize-none text-sm leading-relaxed"
+              />
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+              className="biolab-card-dark py-4 px-5"
+            >
+              <div className="flex items-start gap-3">
+                <svg className="w-4 h-4 mt-0.5 shrink-0" style={{ color: "hsl(45, 95%, 60%)" }} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <p className="text-sm leading-relaxed" style={{ color: "hsl(210, 15%, 65%)" }}>
+                  <strong style={{ color: "hsl(210, 15%, 85%)" }}>Estructura recomendada:</strong> Problema → Inspiración natural → Principio abstracto → Solución técnica → Impacto medible → Siguiente paso
+                </p>
+              </div>
+            </motion.div>
+          </div>
         </div>
 
-        <div className="flex justify-center gap-4">
-          <button onClick={onBack} className="px-6 py-3 rounded-xl text-muted-foreground hover:text-foreground transition-colors font-medium">← Volver</button>
+        <div className="flex justify-center gap-4 mt-12">
+          <button onClick={onBack} className="biolab-btn-ghost">← Volver al canvas</button>
           <button onClick={onNext} className="biolab-btn-accent">
-            Ir a votación →
+            Abrir votación
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
           </button>
         </div>
       </div>
