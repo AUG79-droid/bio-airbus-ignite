@@ -66,6 +66,27 @@ const CANVAS_FIELDS: {
   },
 ];
 
+function cleanSentence(text?: string) {
+  return (text || "").trim().replace(/\s+/g, " ").replace(/[.]$/, "");
+}
+
+function buildExamples(challenge?: { title?: string; description?: string }, organism?: { name?: string; strategy?: string; principle?: string }) {
+  const challengeTitle = challenge?.title || "el reto Airbus seleccionado";
+  const challengeDescription = cleanSentence(challenge?.description) || "resolver una necesidad técnica concreta";
+  const organismName = organism?.name || "el modelo natural elegido";
+  const organismStrategy = cleanSentence(organism?.strategy) || "resuelve esta función de forma eficiente en la naturaleza";
+  const principle = cleanSentence(organism?.principle) || "un principio biomimético útil";
+
+  return {
+    problem: `El equipo quiere resolver ${challengeTitle.toLowerCase()} en Airbus. El problema concreto consiste en ${challengeDescription.toLowerCase()} con una solución técnicamente viable y sin añadir complejidad innecesaria.`,
+    organism: `${organismName} es relevante porque ${organismStrategy.toLowerCase()}. Nos interesa como referencia porque resuelve una función parecida a la del reto Airbus de forma eficiente.`,
+    principle: `El principio que queremos copiar es ${principle.toLowerCase()}. No copiamos la forma del organismo, sino la lógica funcional que utiliza para resolver el problema.`,
+    solution: `Proponemos traducir ${principle.toLowerCase()} a una solución Airbus aplicada a ${challengeTitle.toLowerCase()}. La idea sería diseñar una propuesta técnica inspirada en ${organismName.toLowerCase()} que mejore el rendimiento del sistema sin aumentar demasiado el peso, el consumo o el mantenimiento.`,
+    benefit: `El impacto esperado sería mejorar el rendimiento de ${challengeTitle.toLowerCase()}, reducir ineficiencias operativas y generar una base técnica más sólida para futuras pruebas o pilotos.`,
+    implementation: `El siguiente paso razonable sería hacer una validación inicial: simulación, maqueta funcional o análisis comparativo entre la solución actual y una propuesta inspirada en ${organismName.toLowerCase()}.`,
+  } satisfies Record<keyof CanvasData, string>;
+}
+
 export default function BioCanvasScreen({ onNext, onBack }: BioCanvasScreenProps) {
   const { activeTeam, updateCanvas } = useBioLab();
   if (!activeTeam) return null;
@@ -73,6 +94,13 @@ export default function BioCanvasScreen({ onNext, onBack }: BioCanvasScreenProps
   const completedFields = CANVAS_FIELDS.filter((f) => activeTeam.canvas[f.key].trim().length > 0).length;
   const challenge = activeTeam.challenge;
   const organism = activeTeam.organism;
+  const examples = buildExamples(challenge, organism);
+
+  const injectExample = (key: keyof CanvasData) => {
+    if (!activeTeam.canvas[key].trim()) {
+      updateCanvas(key, examples[key]);
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col py-20 biolab-grid-pattern">
@@ -143,7 +171,7 @@ export default function BioCanvasScreen({ onNext, onBack }: BioCanvasScreenProps
                 <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
                   <span className="biolab-label block mb-2">Paso 2</span>
                   <p className="text-sm text-slate-200/80 leading-6">
-                    Escribid la solución como si tuvierais que explicársela a alguien de Airbus en menos de un minuto.
+                    Si os quedáis en blanco, usad los <strong>ejemplos base</strong> de abajo y adaptadlos a vuestro caso.
                   </p>
                 </div>
                 <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
@@ -194,6 +222,38 @@ export default function BioCanvasScreen({ onNext, onBack }: BioCanvasScreenProps
           </div>
         </motion.div>
 
+        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="max-w-6xl mx-auto mb-8">
+          <div className="biolab-card p-5">
+            <div className="flex items-start justify-between gap-4 flex-wrap mb-4">
+              <div>
+                <span className="biolab-label block mb-2">Ejemplos base para desbloquear el canvas</span>
+                <h3 className="text-xl font-display font-bold text-foreground">No copies literal: adapta estos textos a vuestro caso</h3>
+              </div>
+              <div className="text-sm text-muted-foreground max-w-xl">
+                Están generados a partir de vuestro <strong>reto Airbus</strong>, el <strong>modelo natural elegido</strong> y el <strong>principio biomimético</strong>.
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+              {CANVAS_FIELDS.map((field) => (
+                <div key={field.key} className="rounded-2xl border border-border bg-background/70 p-4 flex flex-col gap-3">
+                  <div>
+                    <h4 className="text-sm font-semibold font-display text-foreground">{field.label}</h4>
+                    <p className="text-xs text-muted-foreground mt-1">{field.sublabel}</p>
+                  </div>
+                  <p className="text-sm leading-6 text-muted-foreground">{examples[field.key]}</p>
+                  <button
+                    type="button"
+                    onClick={() => injectExample(field.key)}
+                    className="biolab-btn-ghost self-start"
+                  >
+                    Usar este ejemplo base
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-5 mb-12">
           {CANVAS_FIELDS.map((field, i) => (
             <motion.div
@@ -203,9 +263,18 @@ export default function BioCanvasScreen({ onNext, onBack }: BioCanvasScreenProps
               transition={{ delay: i * 0.05 }}
               className={`biolab-card ${field.span ? "md:col-span-2" : ""}`}
             >
-              <div className="mb-3">
-                <h3 className="text-sm font-semibold font-display text-foreground">{field.label}</h3>
-                <p className="text-xs text-muted-foreground mt-0.5">{field.sublabel}</p>
+              <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
+                <div>
+                  <h3 className="text-sm font-semibold font-display text-foreground">{field.label}</h3>
+                  <p className="text-xs text-muted-foreground mt-0.5">{field.sublabel}</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => injectExample(field.key)}
+                  className="biolab-btn-ghost"
+                >
+                  Insertar ejemplo
+                </button>
               </div>
               <div className="rounded-xl border border-border/80 bg-background/60 px-3 py-2 mb-3">
                 <p className="text-xs text-muted-foreground leading-5">{field.helper}</p>
