@@ -8,28 +8,11 @@ interface VotingScreenProps {
 }
 
 export default function VotingScreen({ onNext, onBack }: VotingScreenProps) {
-  const { teams, voteForTeam } = useBioLab();
+  const { teams, activeTeamIndex, voteForTeam } = useBioLab();
   const [votedTeams, setVotedTeams] = useState<Set<number>>(new Set());
 
-  const criteria = [
-    {
-      title: "Viabilidad técnica",
-      desc: "¿Se podría pilotar o analizar en Airbus con un siguiente paso razonable?",
-    },
-    {
-      title: "Originalidad",
-      desc: "¿La inspiración natural y la traducción a Airbus aportan una idea interesante?",
-    },
-    {
-      title: "Impacto potencial",
-      desc: "¿Puede mejorar eficiencia, sostenibilidad, mantenimiento o rendimiento?",
-    },
-  ];
-
-  const rankedTeams = useMemo(() => {
-    return teams.map((team, index) => ({ team, index }));
-  }, [teams]);
-
+  const totalVotes = useMemo(() => teams.reduce((sum, team) => sum + team.votes, 0), [teams]);
+  const hasCompetitiveVoting = teams.length > 1;
   const maxVotes = Math.max(...teams.map((t) => t.votes), 1);
 
   const handleVote = (index: number) => {
@@ -38,47 +21,102 @@ export default function VotingScreen({ onNext, onBack }: VotingScreenProps) {
     setVotedTeams((prev) => new Set(prev).add(index));
   };
 
+  if (!hasCompetitiveVoting) {
+    const team = teams[0];
+
+    return (
+      <div className="min-h-screen flex flex-col py-20 biolab-grid-pattern">
+        <div className="biolab-container">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-10">
+            <span className="biolab-phase mb-5 inline-flex">Fase 07 — Cierre de propuesta</span>
+            <h2 className="biolab-section-title mb-3">Aquí no hay una “respuesta correcta”</h2>
+            <p className="biolab-subtitle max-w-3xl mx-auto">
+              Como en esta sesión solo hay <strong>un equipo</strong>, esta pantalla no sirve para competir. Sirve para hacer una <strong>revisión rápida</strong> antes de cerrar la sesión.
+            </p>
+          </motion.div>
+
+          <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="max-w-5xl mx-auto mb-8">
+            <div className="biolab-card-dark px-6 py-6">
+              <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-6 items-start">
+                <div>
+                  <span className="biolab-label block mb-3" style={{ color: "hsl(45, 95%, 65%)" }}>
+                    Qué significa este resultado
+                  </span>
+                  <h3 className="text-2xl md:text-3xl font-bold font-display text-white mb-4">
+                    Esta no es la idea “correcta”. Es la propuesta que vuestro equipo ha construido.
+                  </h3>
+                  <p className="text-base md:text-lg leading-8 text-slate-200/90 mb-5">
+                    En BioLab Airbus no se busca acertar una única solución. Se busca generar una propuesta <strong>coherente</strong>, <strong>defendible</strong> y con un <strong>siguiente paso razonable</strong>.
+                  </p>
+                  <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                    <span className="biolab-label block mb-2">Antes de cerrar, comprobad esto</span>
+                    <ul className="space-y-2 text-sm md:text-base text-slate-200/85 leading-7">
+                      <li>• ¿La propuesta responde de verdad al reto Airbus?</li>
+                      <li>• ¿La inspiración natural encaja con lo que proponéis?</li>
+                      <li>• ¿Queda claro cuál sería el primer piloto o validación?</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 gap-4">
+                  <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                    <span className="biolab-label block mb-2">Equipo</span>
+                    <p className="text-lg font-semibold text-white">{team?.name || "Equipo"}</p>
+                    <p className="text-sm text-slate-300 mt-1">1 propuesta generada · sin comparación competitiva</p>
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                    <span className="biolab-label block mb-2">Reto</span>
+                    <p className="text-sm text-slate-200/85 leading-6">{team?.challenge?.title || "Sin reto asignado"}</p>
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                    <span className="biolab-label block mb-2">Modelo natural</span>
+                    <p className="text-sm text-slate-200/85 leading-6">{team?.organism?.name || "Sin modelo elegido"}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          <div className="flex justify-center gap-4">
+            <button onClick={onBack} className="biolab-btn-ghost">← Volver al pitch</button>
+            <button onClick={onNext} className="biolab-btn-primary">
+              Ir al paso 8: ver cierre de sesión
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex flex-col py-20 biolab-grid-pattern">
       <div className="biolab-container">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col xl:flex-row xl:items-end xl:justify-between gap-5 mb-8"
-        >
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col xl:flex-row xl:items-end xl:justify-between gap-5 mb-8">
           <div>
-            <span className="biolab-phase mb-4 inline-flex">Fase 07 — Votación</span>
+            <span className="biolab-phase mb-5 inline-flex">Fase 07 — Votación</span>
             <h2 className="biolab-section-title mb-3">Ahora elegid la propuesta más prometedora</h2>
             <p className="biolab-subtitle max-w-3xl">
-              Este es el <strong>paso 7</strong>. Aquí no se diseña más. Aquí se compara cada propuesta y se decide cuál parece <strong>más sólida</strong>,
-              <strong> más original</strong> y <strong>más útil para Airbus</strong>.
+              Esto no es un examen. Aquí comparáis las propuestas y decidís cuál parece más <strong>sólida</strong>, más <strong>original</strong> y más <strong>útil para Airbus</strong>.
             </p>
           </div>
 
           <div className="flex items-center gap-3 bg-card border border-border rounded-2xl px-4 py-3 shadow-sm">
             <div className="flex gap-1.5">
               {[...Array(3)].map((_, i) => (
-                <div
-                  key={i}
-                  className={`w-2.5 h-7 rounded-sm ${i < votedTeams.size ? "bg-success" : "bg-border"}`}
-                />
+                <div key={i} className={`w-2.5 h-7 rounded-sm ${i < Math.min(totalVotes, 3) ? "bg-success" : "bg-border"}`} />
               ))}
             </div>
             <div>
               <div className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Votos emitidos</div>
-              <div className="text-sm font-semibold text-foreground">{votedTeams.size} propuesta(s) valorada(s)</div>
+              <div className="text-sm font-semibold text-foreground">{totalVotes} propuesta(s) valorada(s)</div>
             </div>
           </div>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.05 }}
-          className="max-w-6xl mx-auto mb-8"
-        >
+        <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="max-w-6xl mx-auto mb-8">
           <div className="biolab-card-dark px-6 py-6">
-            <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-6 items-start">
+            <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-6 items-start">
               <div>
                 <span className="biolab-label block mb-3" style={{ color: "hsl(45, 95%, 65%)" }}>
                   Qué tienes que hacer aquí
@@ -87,12 +125,11 @@ export default function VotingScreen({ onNext, onBack }: VotingScreenProps) {
                   Compara las propuestas y da un voto a la que mejor cerraría el workshop
                 </h3>
                 <p className="text-base md:text-lg leading-8 text-slate-200/90 mb-5">
-                  Lee cada propuesta como si fueras parte de un comité interno de innovación. No votes la más bonita: vota la que combine mejor
-                  <strong> claridad</strong>, <strong>lógica biomimética</strong> y <strong>potencial real de piloto</strong>.
+                  Lee cada propuesta como si fueras parte de un comité interno de innovación. No votes la más bonita: vota la que combine mejor <strong>claridad</strong>, <strong>lógica biomimética</strong> y <strong>potencial real de piloto</strong>.
                 </p>
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-slate-200/90 text-sm leading-7">
-                  <strong className="block text-white mb-2">Cómo votar en esta demo</strong>
-                  <ul className="space-y-1">
+                <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                  <span className="biolab-label block mb-2">Cómo votar en esta demo</span>
+                  <ul className="space-y-2 text-sm md:text-base text-slate-200/85 leading-7">
                     <li>• Revisa el título, el reto, el modelo natural y el resumen.</li>
                     <li>• Usa los 3 criterios de la derecha como guía mental.</li>
                     <li>• Pulsa <strong>“Dar 1 voto”</strong> solo en las propuestas que te parezcan realmente defendibles.</li>
@@ -100,12 +137,16 @@ export default function VotingScreen({ onNext, onBack }: VotingScreenProps) {
                 </div>
               </div>
 
-              <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
-                {criteria.map((criterion, i) => (
-                  <div key={criterion.title} className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                    <div className="text-[11px] uppercase tracking-[0.16em] text-slate-400 mb-2">Criterio {i + 1}</div>
-                    <div className="text-white font-semibold mb-2">{criterion.title}</div>
-                    <p className="text-sm leading-6 text-slate-300">{criterion.desc}</p>
+              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-1 gap-4">
+                {[
+                  ["Criterio 1", "Viabilidad técnica", "¿Se podría pilotar o analizar en Airbus con un siguiente paso razonable?"],
+                  ["Criterio 2", "Originalidad", "¿La inspiración natural y la traducción a Airbus aportan una idea interesante?"],
+                  ["Criterio 3", "Impacto potencial", "¿Puede mejorar eficiencia, sostenibilidad, mantenimiento o rendimiento?"],
+                ].map(([step, title, text]) => (
+                  <div key={title} className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                    <span className="biolab-label block mb-2">{step}</span>
+                    <p className="text-white font-semibold mb-2">{title}</p>
+                    <p className="text-sm text-slate-200/75 leading-6">{text}</p>
                   </div>
                 ))}
               </div>
@@ -114,93 +155,83 @@ export default function VotingScreen({ onNext, onBack }: VotingScreenProps) {
         </motion.div>
 
         <div className="max-w-6xl mx-auto space-y-5 mb-12">
-          {rankedTeams.map(({ team, index }, i) => {
-            const voteProgress = maxVotes > 0 ? (team.votes / maxVotes) * 100 : 0;
-            const summary =
-              team.pitchSummary?.trim() ||
-              [team.canvas.problem, team.canvas.solution, team.canvas.benefit].filter(Boolean).join(". ") ||
-              "Esta propuesta todavía necesita un resumen más claro antes de la sesión final.";
+          {teams.map((team, i) => {
+            const ownTeam = i === activeTeamIndex;
+            const alreadyVoted = votedTeams.has(i);
 
             return (
               <motion.div
                 key={team.id}
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.12 + i * 0.06 }}
+                transition={{ delay: 0.15 + i * 0.06 }}
                 className="biolab-card"
               >
-                <div className="grid grid-cols-1 xl:grid-cols-[1.2fr_.9fr_auto] gap-5 items-start">
+                <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_170px_120px] gap-4 items-start">
                   <div>
                     <div className="flex flex-wrap items-center gap-3 mb-3">
-                      <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-sm font-mono font-bold text-white" style={{ background: team.color }}>
+                      <div className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-mono font-bold text-white" style={{ background: team.color }}>
                         {String(i + 1).padStart(2, "0")}
                       </div>
                       <div>
-                        <h3 className="text-xl font-bold font-display text-foreground leading-tight">
-                          {team.pitchTitle?.trim() || `Propuesta del equipo ${team.name}`}
-                        </h3>
-                        <div className="text-sm text-muted-foreground">Equipo {team.name}</div>
+                        <h3 className="text-lg font-bold font-display text-foreground">{team.pitchTitle || `Propuesta del equipo ${team.name}`}</h3>
+                        <p className="text-sm text-muted-foreground">Equipo {team.name}</p>
                       </div>
-                      {votedTeams.has(index) && <span className="biolab-badge">Voto registrado</span>}
+                      {ownTeam && <span className="biolab-badge">Tu equipo</span>}
                     </div>
 
-                    <div className="flex flex-wrap gap-2 mb-4 text-xs">
+                    <div className="flex flex-wrap gap-2 mb-3 text-xs">
                       {team.challenge && <span className="biolab-badge">Reto: {team.challenge.title}</span>}
                       {team.organism && <span className="biolab-badge">Modelo: {team.organism.name}</span>}
                       {team.organism?.principle && <span className="biolab-badge">Principio: {team.organism.principle}</span>}
                     </div>
 
-                    <p className="text-sm md:text-base leading-7 text-muted-foreground mb-4">{summary}</p>
+                    <p className="text-sm text-muted-foreground leading-7 mb-4">
+                      {team.pitchSummary || "Esta propuesta todavía necesita un resumen más claro antes de la sesión final."}
+                    </p>
 
-                    <div className="rounded-2xl border border-border bg-muted/25 p-4">
-                      <div className="text-[11px] uppercase tracking-[0.16em] text-muted-foreground mb-2">Qué deberías valorar al votar</div>
-                      <div className="grid md:grid-cols-3 gap-3 text-sm text-foreground">
-                        <div><strong>Viabilidad</strong><br /><span className="text-muted-foreground">¿Se entiende un siguiente paso real?</span></div>
-                        <div><strong>Originalidad</strong><br /><span className="text-muted-foreground">¿La conexión naturaleza-Airbus tiene sentido?</span></div>
-                        <div><strong>Impacto</strong><br /><span className="text-muted-foreground">¿Puede aportar mejora tangible?</span></div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                      <div className="rounded-xl border border-border bg-muted/40 p-3">
+                        <span className="biolab-label block mb-1">Qué deberías valorar al votar</span>
+                        <p className="text-xs text-muted-foreground leading-5"><strong>Viabilidad</strong><br />¿Se entiende un siguiente paso real?</p>
                       </div>
+                      <div className="rounded-xl border border-border bg-muted/40 p-3">
+                        <span className="biolab-label block mb-1">Originalidad</span>
+                        <p className="text-xs text-muted-foreground leading-5">¿La conexión naturaleza-Airbus tiene sentido y merece revisarse?</p>
+                      </div>
+                      <div className="rounded-xl border border-border bg-muted/40 p-3">
+                        <span className="biolab-label block mb-1">Impacto</span>
+                        <p className="text-xs text-muted-foreground leading-5">¿Puede aportar mejora tangible?</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="rounded-2xl overflow-hidden border border-border bg-muted/30">
+                    {team.organism?.image ? (
+                      <img src={team.organism.image} alt={team.organism.name} className="w-full h-40 object-cover" referrerPolicy="no-referrer" />
+                    ) : (
+                      <div className="h-40 flex items-center justify-center text-muted-foreground text-sm">Sin imagen</div>
+                    )}
+                    <div className="p-3 border-t border-border">
+                      <span className="biolab-label block mb-1">Marcador actual</span>
+                      <p className="text-sm text-muted-foreground">Votos acumulados</p>
+                      <p className="text-2xl font-display font-bold text-foreground mt-1">{team.votes}</p>
                     </div>
                   </div>
 
                   <div className="space-y-3">
-                    {team.organism?.image ? (
-                      <img
-                        src={team.organism.image}
-                        alt={team.organism.name}
-                        className="w-full h-44 object-cover rounded-2xl border border-border shadow-sm"
-                      />
-                    ) : (
-                      <div className="w-full h-44 rounded-2xl border border-border bg-muted" />
-                    )}
-                    <div className="rounded-2xl border border-border bg-card p-4">
-                      <div className="text-[11px] uppercase tracking-[0.16em] text-muted-foreground mb-2">Marcador actual</div>
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm text-muted-foreground">Votos acumulados</span>
-                        <strong className="text-2xl font-display text-foreground">{team.votes}</strong>
-                      </div>
-                      <div className="h-2 rounded-full bg-muted overflow-hidden">
-                        <motion.div
-                          initial={{ width: 0 }}
-                          animate={{ width: `${voteProgress}%` }}
-                          transition={{ duration: 0.45 }}
-                          className="h-full rounded-full"
-                          style={{ background: team.color }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="xl:w-52 flex xl:block gap-3">
                     <button
-                      onClick={() => handleVote(index)}
-                      disabled={votedTeams.has(index)}
-                      className={`w-full ${votedTeams.has(index) ? "biolab-btn-ghost opacity-70 cursor-not-allowed" : "biolab-btn-primary"}`}
+                      onClick={() => handleVote(i)}
+                      disabled={ownTeam || alreadyVoted}
+                      className={`w-full ${ownTeam || alreadyVoted ? "biolab-btn-ghost opacity-60 cursor-not-allowed" : "biolab-btn-primary"}`}
                     >
-                      {votedTeams.has(index) ? "Voto emitido" : "Dar 1 voto"}
+                      {ownTeam ? "No votar" : alreadyVoted ? "Voto emitido" : "Dar 1 voto"}
                     </button>
-                    <div className="rounded-2xl border border-border bg-card p-4 text-sm leading-6 text-muted-foreground xl:mt-3">
-                      <strong className="block text-foreground mb-1">Consejo</strong>
-                      Vota la propuesta que presentarías a una revisión interna sin necesidad de explicar demasiado contexto extra.
+                    <div className="rounded-xl border border-border bg-muted/40 p-3">
+                      <span className="biolab-label block mb-1">Consejo</span>
+                      <p className="text-xs text-muted-foreground leading-5">
+                        Vota la propuesta que presentarías a una revisión interna sin necesidad de explicar demasiado contexto extra.
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -209,13 +240,11 @@ export default function VotingScreen({ onNext, onBack }: VotingScreenProps) {
           })}
         </div>
 
-        <div className="flex justify-center gap-4 flex-wrap">
+        <div className="flex justify-center gap-4">
           <button onClick={onBack} className="biolab-btn-ghost">← Volver al pitch</button>
           <button onClick={onNext} className="biolab-btn-primary">
             Ir al paso 8: ver resultados
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-            </svg>
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
           </button>
         </div>
       </div>
