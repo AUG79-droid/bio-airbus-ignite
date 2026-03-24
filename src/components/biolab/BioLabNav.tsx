@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { useBioLab } from "@/contexts/BioLabContext";
 
 const SCREEN_LABELS = [
-  "Inicio", "Proceso", "Equipos", "Reto", "Catálogo",
+  "Inicio", "Cómo funciona", "Equipos", "Reto Airbus", "Modelos naturales",
   "Conexión", "Canvas", "Pitch", "Votación", "Resultados"
 ];
 
@@ -24,7 +24,6 @@ export default function BioLabNav() {
           <span className="text-gradient-accent font-display font-bold text-sm">Airbus</span>
         </div>
 
-        {/* Progress dots */}
         <div className="hidden md:flex items-center gap-1">
           {SCREEN_LABELS.slice(1).map((label, i) => {
             const screenIndex = i + 1;
