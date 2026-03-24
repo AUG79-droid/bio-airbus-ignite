@@ -54,10 +54,10 @@ export default function ChallengeRoulette({ onNext, onBack }: ChallengeRouletteP
       <div className="biolab-container">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-10">
           <span className="biolab-phase mb-5 inline-flex">Fase 02 — Asignación de reto</span>
-          <h2 className="biolab-section-title mb-3">Selector de retos</h2>
+          <h2 className="biolab-section-title mb-3">Selecciona el reto que va a resolver tu equipo</h2>
           {activeTeam && (
             <p className="biolab-subtitle">
-              Equipo <strong className="text-foreground font-semibold">{activeTeam.name}</strong>
+              Equipo <strong className="text-foreground font-semibold">{activeTeam.name}</strong>. El reto que salga será el problema Airbus que tendréis que resolver con biomímesis.
             </p>
           )}
         </motion.div>
@@ -168,15 +168,15 @@ export default function ChallengeRoulette({ onNext, onBack }: ChallengeRouletteP
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                     </svg>
-                    Asignando...
+                    Girando...
                   </>
                 ) : (
-                  "Asignar reto"
+                  "Girar ruleta"
                 )}
               </motion.button>
             ) : (
               <>
-                <button onClick={spin} className="biolab-btn-ghost">Reasignar</button>
+                <button onClick={spin} className="biolab-btn-ghost">Volver a girar</button>
                 <button onClick={handleConfirm} className="biolab-btn-primary">
                   Confirmar reto
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
