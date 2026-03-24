@@ -27,19 +27,19 @@ export default function TeamsScreen({ onNext, onBack }: TeamsScreenProps) {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
           <span className="biolab-phase mb-5 inline-flex">Fase 01</span>
           <h2 className="biolab-section-title mb-3">Configuración de equipos</h2>
-          <p className="biolab-subtitle">Grupos de 3-5 personas por equipo</p>
+          <p className="biolab-subtitle">Crea uno o varios equipos para la dinámica. Si estás probando la app tú sola, también puedes crear un único equipo.</p>
         </motion.div>
 
         <div className="max-w-xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="biolab-card mb-8">
-            <label className="biolab-label block mb-3">Nuevo equipo</label>
+            <label className="biolab-label block mb-3">Nombre del equipo</label>
             <div className="flex gap-3">
               <input
                 type="text"
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleAdd()}
-                placeholder="Nombre del equipo"
+                placeholder="Ej.: Ala Biónica, Equipo Gecko, TermoLab..."
                 className="biolab-input flex-1 text-base"
               />
               <button onClick={handleAdd} className="biolab-btn-primary shrink-0 px-6 py-3">
@@ -91,7 +91,7 @@ export default function TeamsScreen({ onNext, onBack }: TeamsScreenProps) {
 
           {teams.length === 0 && (
             <div className="text-center py-12 text-muted-foreground">
-              <p className="text-sm">Aún no hay equipos registrados</p>
+              <p className="text-sm">Añade al menos un equipo para empezar la dinámica</p>
             </div>
           )}
         </div>
