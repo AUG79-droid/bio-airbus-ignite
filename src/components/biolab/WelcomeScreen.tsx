@@ -1,6 +1,4 @@
 import { motion } from "framer-motion";
-import heroImage from "@/assets/hero-biolab.jpg";
-
 interface WelcomeScreenProps {
   onNext: () => void;
 }
@@ -16,7 +14,7 @@ export default function WelcomeScreen({ onNext }: WelcomeScreenProps) {
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
       <img
-        src={heroImage}
+        src="/bio-airbus-ignite/hero-biolab.jpg"
         alt="Biomímesis: naturaleza e ingeniería"
         className="absolute inset-0 w-full h-full object-cover"
         width={1920}
