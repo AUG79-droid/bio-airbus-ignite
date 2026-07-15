@@ -36,6 +36,9 @@ export interface TeamData {
   votes: number;
 }
 
+const natureImage = (fileName: string) =>
+  `${import.meta.env.BASE_URL}images/nature/${fileName}`;
+
 export const CHALLENGES: Challenge[] = [
   {
     id: "c1",
@@ -101,7 +104,7 @@ export const ORGANISMS: Organism[] = [
     name: "Martín pescador",
     strategy: "La forma de su pico penetra el agua con mínima perturbación, reduciendo resistencia y turbulencia.",
     principle: "Optimización de forma",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Common_kingfisher_(3).jpg",
+    image: natureImage("kingfisher.jpg"),
     fact: "Úsalo si tu reto consiste en reducir fricción, arrastre, ruido o pérdidas al atravesar un fluido.",
   },
   {
@@ -109,7 +112,7 @@ export const ORGANISMS: Organism[] = [
     name: "Termitero",
     strategy: "Su estructura regula temperatura y ventilación de forma pasiva, sin depender de climatización continua.",
     principle: "Termorregulación pasiva",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/A_termite_mound.jpg",
+    image: natureImage("termite-mound.jpg"),
     fact: "Encaja muy bien con retos de ventilación, temperatura, consumo energético, confort térmico o diseño pasivo.",
   },
   {
@@ -117,7 +120,7 @@ export const ORGANISMS: Organism[] = [
     name: "Huesos de ave",
     strategy: "Combinan cavidades y refuerzos internos para lograr una relación muy alta entre ligereza y resistencia.",
     principle: "Estructura jerárquica",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Bone_(254_02)_Bird_bone_cross-section.jpg",
+    image: natureImage("bird-bone.jpg"),
     fact: "Es útil cuando buscas aligerar estructuras, piezas o soportes sin comprometer robustez ni seguridad.",
   },
   {
@@ -125,7 +128,7 @@ export const ORGANISMS: Organism[] = [
     name: "Piel de tiburón",
     strategy: "Su microtextura superficial reduce fricción y dificulta que otras partículas o organismos se adhieran.",
     principle: "Reducción de fricción",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/White_shark.jpg",
+    image: natureImage("shark.jpg"),
     fact: "Puede inspirar superficies con menos rozamiento, menos suciedad o menos acumulación no deseada.",
   },
   {
@@ -133,7 +136,7 @@ export const ORGANISMS: Organism[] = [
     name: "Tela de araña",
     strategy: "Su red distribuye cargas y absorbe impactos combinando resistencia, elasticidad y mínimo material.",
     principle: "Resistencia y flexibilidad",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Spider_web_with_dew_drops03.jpg",
+    image: natureImage("spider-web.jpg"),
     fact: "Piensa en ella si tu reto necesita absorber energía, repartir cargas o ganar flexibilidad sin perder resistencia.",
   },
   {
@@ -141,7 +144,7 @@ export const ORGANISMS: Organism[] = [
     name: "Gecko",
     strategy: "Se adhiere a superficies de forma reversible, precisa y sin dejar residuos permanentes.",
     principle: "Adhesión sin residuos",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Gecko.jpg",
+    image: natureImage("gecko.jpg"),
     fact: "Es un buen modelo si buscas fijación temporal, agarre controlado, mantenimiento limpio o unión reversible.",
   },
   {
@@ -149,7 +152,7 @@ export const ORGANISMS: Organism[] = [
     name: "Hoja de loto",
     strategy: "Su superficie repele agua y suciedad gracias a microestructuras que favorecen el efecto autolimpiante.",
     principle: "Autolimpieza",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Lotus_Leaf_(5780807588).jpg",
+    image: natureImage("lotus-leaf.jpg"),
     fact: "Aplícalo cuando el problema tenga que ver con limpieza, repelencia, mantenimiento superficial o reducción de adherencias.",
   },
   {
@@ -157,7 +160,7 @@ export const ORGANISMS: Organism[] = [
     name: "Cardumen de peces",
     strategy: "Miles de individuos se coordinan sin un líder central, reaccionando rápido y optimizando movimiento colectivo.",
     principle: "Inteligencia distribuida",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Fish_school_(Unsplash).jpg",
+    image: natureImage("fish-school.jpg"),
     fact: "Te sirve para pensar en coordinación logística, movimiento de flujos, sistemas distribuidos o decisiones descentralizadas.",
   },
   {
@@ -165,7 +168,7 @@ export const ORGANISMS: Organism[] = [
     name: "Nácar",
     strategy: "Sus capas alternas de material duro y blando frenan la propagación de grietas y mejoran la tenacidad.",
     principle: "Resistencia a fractura",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Abalone_nacre.JPG",
+    image: natureImage("nacre.jpg"),
     fact: "Es un modelo útil si buscas resistencia a grietas, durabilidad, absorción de daño o materiales multicapa.",
   },
   {
@@ -173,7 +176,7 @@ export const ORGANISMS: Organism[] = [
     name: "Murciélago",
     strategy: "Detecta obstáculos y navega con precisión usando ecolocación, incluso en entornos complejos y con poca visibilidad.",
     principle: "Detección no invasiva",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/A_Bat.jpg",
+    image: natureImage("bat.jpg"),
     fact: "Úsalo para retos de inspección, detección temprana, navegación, monitorización o mantenimiento no invasivo.",
   },
 ];
