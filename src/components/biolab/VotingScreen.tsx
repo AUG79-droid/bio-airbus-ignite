@@ -46,7 +46,7 @@ export default function VotingScreen({ onNext, onBack }: VotingScreenProps) {
                     Esta no es la idea “correcta”. Es la propuesta que vuestro equipo ha construido.
                   </h3>
                   <p className="text-base md:text-lg leading-8 text-slate-200/90 mb-5">
-                    En BioLab Airbus no se busca acertar una única solución. Se busca generar una propuesta <strong>coherente</strong>, <strong>defendible</strong> y con un <strong>siguiente paso razonable</strong>.
+                    En Sustainable Innovation Lab no se busca acertar una única solución. Se busca generar una propuesta <strong>coherente</strong>, <strong>defendible</strong> y con un <strong>siguiente paso razonable</strong>.
                   </p>
                   <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
                     <span className="biolab-label block mb-2">Antes de cerrar, comprobad esto</span>
