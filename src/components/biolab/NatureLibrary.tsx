@@ -24,10 +24,10 @@ export default function NatureLibrary({ onNext, onBack }: NatureLibraryProps) {
     <div className="min-h-screen flex flex-col py-20 biolab-grid-pattern">
       <div className="biolab-container">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
-          <span className="biolab-phase mb-5 inline-flex">Fase 03 — Exploración</span>
-          <h2 className="biolab-section-title mb-3">Elige el modelo natural que más te ayude</h2>
+          <span className="biolab-phase mb-5 inline-flex">Etapa 03 — Exploración</span>
+          <h2 className="biolab-section-title mb-3">Elige el modelo natural que mejor puede ayudarte</h2>
           <p className="biolab-subtitle max-w-3xl mx-auto">
-            Aquí no tienes que acertar una respuesta. Tienes que escoger <strong>un modelo de la naturaleza</strong> que te sirva para inspirar la solución de tu reto Airbus.
+            Aquí no existe una única respuesta correcta. Elige <strong>un modelo de la naturaleza</strong> que pueda inspirar una solución para tu reto Airbus.
           </p>
         </motion.div>
 
@@ -38,7 +38,7 @@ export default function NatureLibrary({ onNext, onBack }: NatureLibraryProps) {
                 <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
               </div>
               <div className="flex-1 min-w-0">
-                <span className="biolab-label block">Reto que vais a resolver</span>
+                <span className="biolab-label block">Reto que vas a resolver</span>
                 <span className="text-base font-semibold text-foreground">{activeTeam.challenge.title}</span>
                 <p className="text-sm text-muted-foreground mt-1">{activeTeam.challenge.description}</p>
               </div>
@@ -51,23 +51,23 @@ export default function NatureLibrary({ onNext, onBack }: NatureLibraryProps) {
           <div className="biolab-card-dark px-6 py-5">
             <div className="flex flex-wrap items-start gap-6">
               <div className="min-w-[180px]">
-                <span className="biolab-label block mb-2" style={{ color: "hsl(45, 95%, 65%)" }}>Qué tienes que hacer aquí</span>
+                <span className="biolab-label block mb-2" style={{ color: "hsl(45, 95%, 65%)" }}>Qué debes hacer aquí</span>
                 <p className="text-sm leading-6" style={{ color: "hsl(210, 15%, 78%)" }}>
-                  Mira las fotos, lee la estrategia y elige <strong>solo un modelo natural</strong> para tu equipo.
+                  Examina las imágenes, lee cada estrategia y elige <strong>un único modelo natural</strong> para tu equipo.
                 </p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 flex-1">
                 <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
                   <span className="biolab-label block mb-2">Paso 1</span>
-                  <p className="text-sm text-muted-foreground">Revisa 2 o 3 tarjetas y piensa qué función de la naturaleza se parece más a tu reto.</p>
+                  <p className="text-sm text-muted-foreground">Revisa dos o tres fichas y valora qué función natural resulta más relevante para tu reto.</p>
                 </div>
                 <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
                   <span className="biolab-label block mb-2">Paso 2</span>
-                  <p className="text-sm text-muted-foreground">Pulsa <strong>“Elegir este modelo”</strong> en la tarjeta que mejor encaje.</p>
+                  <p className="text-sm text-muted-foreground">Pulsa <strong>«Elegir este modelo»</strong> en la ficha que mejor encaje.</p>
                 </div>
                 <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
                   <span className="biolab-label block mb-2">Paso 3</span>
-                  <p className="text-sm text-muted-foreground">Cuando lo tengas claro, pulsa el botón azul de abajo para pasar al siguiente paso.</p>
+                  <p className="text-sm text-muted-foreground">Cuando lo tengas claro, utiliza el botón azul inferior para continuar.</p>
                 </div>
               </div>
             </div>
@@ -78,9 +78,9 @@ export default function NatureLibrary({ onNext, onBack }: NatureLibraryProps) {
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="max-w-5xl mx-auto mb-8">
             <div className="biolab-card flex flex-wrap items-center justify-between gap-4 px-5 py-4 border-primary/25 ring-1 ring-primary/15">
               <div>
-                <span className="biolab-label block mb-1">Modelo ya elegido para tu equipo</span>
+                <span className="biolab-label block mb-1">Modelo seleccionado para tu equipo</span>
                 <p className="text-base font-semibold text-foreground">{selectedOrganism.name}</p>
-                <p className="text-sm text-muted-foreground">Ahora ya puedes pulsar <strong>“Ir al paso 4”</strong>.</p>
+                <p className="text-sm text-muted-foreground">Ya puedes seleccionar <strong>«Ir al paso 4»</strong>.</p>
               </div>
               <button onClick={onNext} className="biolab-btn-primary">
                 Ir al paso 4
@@ -120,13 +120,13 @@ export default function NatureLibrary({ onNext, onBack }: NatureLibraryProps) {
                       </div>
                       <span className="biolab-badge text-[11px]">{org.principle}</span>
                     </div>
-                    {isSelected && <span className="biolab-badge">Elegido</span>}
+                    {isSelected && <span className="biolab-badge">Seleccionado</span>}
                   </div>
 
                   <p className="text-sm text-muted-foreground leading-relaxed mb-4">{org.strategy}</p>
 
                   <div className="rounded-xl bg-muted/50 border border-border p-3 mb-4">
-                    <span className="biolab-label block mb-1">Cómo puede ayudarte</span>
+                    <span className="biolab-label block mb-1">Cómo puede ayudar</span>
                     <p className="text-sm text-foreground/90 leading-relaxed">{org.fact}</p>
                   </div>
 
@@ -139,9 +139,9 @@ export default function NatureLibrary({ onNext, onBack }: NatureLibraryProps) {
                         className="overflow-hidden"
                       >
                         <div className="rounded-xl border border-primary/15 bg-primary/5 p-3 mb-4">
-                          <span className="biolab-label block mb-1">Pista para decidir</span>
+                          <span className="biolab-label block mb-1">Consejo para decidir</span>
                           <p className="text-sm text-muted-foreground leading-relaxed">
-                            No busques un animal “parecido” a Airbus. Busca una <strong>función</strong> que se parezca al problema que quieres resolver.
+                            No busques un animal que se parezca a un avión. Busca una <strong>función</strong> comparable al problema que quieres resolver.
                           </p>
                         </div>
                       </motion.div>
@@ -157,13 +157,13 @@ export default function NatureLibrary({ onNext, onBack }: NatureLibraryProps) {
                           : "bg-secondary text-secondary-foreground hover:bg-primary hover:text-primary-foreground"
                       }`}
                     >
-                      {isSelected ? "✓ Modelo elegido" : "Elegir este modelo"}
+                      {isSelected ? "✓ Modelo seleccionado" : "Elegir este modelo"}
                     </button>
                     <button
                       onClick={() => setExpandedId(isExpanded ? null : org.id)}
                       className="px-4 py-2.5 rounded-lg text-sm font-semibold border border-border bg-background hover:bg-muted transition-colors"
                     >
-                      {isExpanded ? "Ocultar ayuda" : "Ver ayuda para decidir"}
+                      {isExpanded ? "Ocultar orientación" : "Ver orientación para decidir"}
                     </button>
                   </div>
                 </div>

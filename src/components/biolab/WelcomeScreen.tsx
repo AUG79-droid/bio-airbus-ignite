@@ -4,17 +4,17 @@ interface WelcomeScreenProps {
 }
 
 const QUICK_FLOW = [
-  { n: "1", title: "Recibe un reto Airbus", text: "La app te asigna o te deja elegir un reto real de aeronáutica, planta o mantenimiento." },
-  { n: "2", title: "Explora la naturaleza", text: "Descubres cómo organismos y ecosistemas resuelven funciones parecidas." },
-  { n: "3", title: "Traduce el principio", text: "Conviertes esa estrategia natural en una idea aplicable a Airbus." },
-  { n: "4", title: "Presenta y vota", text: "Cada equipo prepara un mini pitch y el grupo vota las propuestas más prometedoras." },
+  { n: "1", title: "Recibe un reto Airbus", text: "La aplicación asigna un reto realista de aeronáutica, planta o mantenimiento." },
+  { n: "2", title: "Explora la naturaleza", text: "Descubre cómo organismos y ecosistemas realizan funciones similares." },
+  { n: "3", title: "Traduce el principio", text: "Convierte esa estrategia natural en una idea aplicable al contexto Airbus." },
+  { n: "4", title: "Presenta y evalúa", text: "Cada equipo prepara una exposición breve y el grupo evalúa las propuestas más prometedoras." },
 ];
 
 export default function WelcomeScreen({ onNext }: WelcomeScreenProps) {
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
       <img
-        src="/bio-airbus-ignite/hero-biolab.jpg"
+        src={`${import.meta.env.BASE_URL}hero-biolab.jpg`}
         alt="Biomímesis: naturaleza e ingeniería"
         className="absolute inset-0 w-full h-full object-cover"
         width={1920}
@@ -26,9 +26,9 @@ export default function WelcomeScreen({ onNext }: WelcomeScreenProps) {
       <div className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between px-8 py-6">
         <div className="flex items-center gap-2 opacity-70">
           <div className="w-1.5 h-1.5 rounded-full bg-current" style={{ color: "hsl(45, 95%, 52%)" }} />
-          <span className="font-mono-label" style={{ color: "hsl(210, 15%, 65%)" }}>Workshop guiado de biomímesis</span>
+          <span className="font-mono-label" style={{ color: "hsl(210, 15%, 65%)" }}>Taller guiado de biomímesis</span>
         </div>
-        <span className="font-mono-label" style={{ color: "hsl(210, 15%, 50%)" }}>Airbus Innovation Lab</span>
+        <span className="hidden sm:block font-mono-label" style={{ color: "hsl(210, 15%, 60%)" }}>Simulación aplicada al contexto Airbus</span>
       </div>
 
       <motion.div
@@ -52,14 +52,14 @@ export default function WelcomeScreen({ onNext }: WelcomeScreenProps) {
             }}
           >
             <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
-            Sesión práctica para equipos Airbus
+            Experiencia guiada de diseño biomimético
           </span>
         </motion.div>
 
         <div className="text-center max-w-4xl mx-auto">
           <h1 className="font-display font-bold tracking-tight mb-6" style={{ color: "hsl(0, 0%, 98%)" }}>
-            <span className="block text-5xl md:text-7xl lg:text-8xl">Sustainable</span>
-            <span className="block text-5xl md:text-7xl lg:text-8xl text-gradient-accent mt-1">Innovation Lab</span>
+            <span className="block text-5xl md:text-7xl lg:text-8xl">Innovación</span>
+            <span className="block text-5xl md:text-7xl lg:text-8xl text-gradient-accent mt-1">Bioinspirada</span>
           </h1>
 
           <motion.div
@@ -71,11 +71,11 @@ export default function WelcomeScreen({ onNext }: WelcomeScreenProps) {
           />
 
           <p className="text-xl md:text-2xl font-light mb-4 max-w-3xl mx-auto leading-relaxed" style={{ color: "hsl(210, 15%, 82%)" }}>
-            Convierte estrategias de la naturaleza en ideas aplicables a <strong className="font-semibold text-white">aeronáutica, planta y mantenimiento</strong>.
+            Convierte estrategias de la naturaleza en ideas para la <strong className="font-semibold text-white">aeronáutica, las operaciones de planta y el mantenimiento</strong>.
           </p>
 
           <p className="text-sm md:text-base mb-8 max-w-3xl mx-auto leading-relaxed" style={{ color: "hsl(210, 15%, 68%)" }}>
-            <strong className="text-white">Esto no es un quiz.</strong> Es una dinámica guiada para trabajar en equipo: recibes un reto Airbus, exploras modelos naturales, identificas el principio biomimético y lo traduces a una propuesta defendible.
+            <strong className="text-white">Esto no es un cuestionario.</strong> Combina teoría esencial de biomímesis con un ejercicio guiado en equipo: definir un reto, estudiar estrategias biológicas y traducir una de ellas en una propuesta verificable.
           </p>
         </div>
 
@@ -96,7 +96,7 @@ export default function WelcomeScreen({ onNext }: WelcomeScreenProps) {
 
         <div className="text-center mb-12">
           <p className="text-sm max-w-2xl mx-auto mb-6" style={{ color: "hsl(210, 15%, 58%)" }}>
-            La biomímesis aprende de la naturaleza para resolver problemas humanos. En esta sesión la usaremos para generar ideas útiles para Airbus, no para memorizar teoría.
+            La biomímesis estudia cómo realizan sus funciones los sistemas vivos y traduce esas estrategias al diseño humano. Avanzarás desde la función hasta el mecanismo biológico, el principio de diseño, la aplicación y la validación.
           </p>
 
           <motion.button
@@ -105,11 +105,17 @@ export default function WelcomeScreen({ onNext }: WelcomeScreenProps) {
             onClick={onNext}
             className="biolab-btn-accent text-lg px-14 py-5"
           >
-            Ver cómo funciona y empezar
+            Entrar en el estudio de diseño
             <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
             </svg>
           </motion.button>
+        </div>
+
+        <div className="max-w-3xl mx-auto mb-9 rounded-2xl border border-white/15 bg-black/30 backdrop-blur-md px-5 py-4 text-center">
+          <p className="text-xs md:text-sm leading-6" style={{ color: "hsl(210, 15%, 74%)" }}>
+            <strong className="text-white">Aviso de uso educativo:</strong> esta simulación independiente utiliza escenarios relevantes para el contexto Airbus. No representa un proceso oficial de Airbus, una recomendación técnica ni una declaración ambiental.
+          </p>
         </div>
 
         <motion.div
@@ -119,7 +125,7 @@ export default function WelcomeScreen({ onNext }: WelcomeScreenProps) {
           className="flex items-center justify-center gap-8"
         >
           {[
-            { n: "6", label: "fases" },
+            { n: "6", label: "etapas" },
             { n: "8", label: "retos Airbus" },
             { n: "10", label: "modelos naturales" },
           ].map((stat) => (
