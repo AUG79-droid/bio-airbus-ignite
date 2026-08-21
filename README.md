@@ -1,7 +1,22 @@
-# Sustainable Innovation Lab
+# Laboratorio de Innovación Bioinspirada — Edición en español
 
-Un laboratorio guiado de biomímesis e innovación sostenible para equipos Airbus.
+Taller independiente y guiado de biomímesis que ayuda a transformar retos del contexto Airbus en propuestas de innovación inspiradas en la naturaleza y próximos pasos verificables.
 
-## Aplicación pública
+## Aplicación publicada
 
 https://aug79-droid.github.io/bio-airbus-ignite/
+
+## Desarrollo local
+
+```sh
+npm install
+npm run dev
+```
+
+## Comprobaciones de producción
+
+```sh
+npm run lint
+npm test
+npm run build
+```

@@ -28,10 +28,10 @@ export default function VotingScreen({ onNext, onBack }: VotingScreenProps) {
       <div className="min-h-screen flex flex-col py-20 biolab-grid-pattern">
         <div className="biolab-container">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-10">
-            <span className="biolab-phase mb-5 inline-flex">Fase 07 — Cierre de propuesta</span>
-            <h2 className="biolab-section-title mb-3">Aquí no hay una “respuesta correcta”</h2>
+            <span className="biolab-phase mb-5 inline-flex">Etapa 07 — Revisión de la propuesta</span>
+            <h2 className="biolab-section-title mb-3">Aquí no existe una «respuesta correcta»</h2>
             <p className="biolab-subtitle max-w-3xl mx-auto">
-              Como en esta sesión solo hay <strong>un equipo</strong>, esta pantalla no sirve para competir. Sirve para hacer una <strong>revisión rápida</strong> antes de cerrar la sesión.
+              Como esta sesión solo tiene <strong>un equipo</strong>, esta pantalla no es una competición. Ofrece una <strong>revisión rápida</strong> antes de cerrar la sesión.
             </p>
           </motion.div>
 
@@ -43,17 +43,17 @@ export default function VotingScreen({ onNext, onBack }: VotingScreenProps) {
                     Qué significa este resultado
                   </span>
                   <h3 className="text-2xl md:text-3xl font-bold font-display text-white mb-4">
-                    Esta no es la idea “correcta”. Es la propuesta que vuestro equipo ha construido.
+                    No es la idea «correcta». Es la propuesta que ha construido tu equipo.
                   </h3>
                   <p className="text-base md:text-lg leading-8 text-slate-200/90 mb-5">
-                    En Sustainable Innovation Lab no se busca acertar una única solución. Se busca generar una propuesta <strong>coherente</strong>, <strong>defendible</strong> y con un <strong>siguiente paso razonable</strong>.
+                    El Laboratorio de Innovación Bioinspirada no busca una única solución. Su objetivo es generar una propuesta <strong>coherente</strong>, <strong>defendible</strong> y con un <strong>próximo paso razonable</strong>.
                   </p>
                   <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                    <span className="biolab-label block mb-2">Antes de cerrar, comprobad esto</span>
+                    <span className="biolab-label block mb-2">Comprueba esto antes de terminar</span>
                     <ul className="space-y-2 text-sm md:text-base text-slate-200/85 leading-7">
-                      <li>• ¿La propuesta responde de verdad al reto Airbus?</li>
-                      <li>• ¿La inspiración natural encaja con lo que proponéis?</li>
-                      <li>• ¿Queda claro cuál sería el primer piloto o validación?</li>
+                      <li>• ¿La propuesta aborda realmente el reto Airbus?</li>
+                      <li>• ¿La inspiración natural encaja con lo que propones?</li>
+                      <li>• ¿Está claro el primer piloto o paso de validación?</li>
                     </ul>
                   </div>
                 </div>
@@ -66,11 +66,11 @@ export default function VotingScreen({ onNext, onBack }: VotingScreenProps) {
                   </div>
                   <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
                     <span className="biolab-label block mb-2">Reto</span>
-                    <p className="text-sm text-slate-200/85 leading-6">{team?.challenge?.title || "Sin reto asignado"}</p>
+                    <p className="text-sm text-slate-200/85 leading-6">{team?.challenge?.title || "Ningún reto asignado"}</p>
                   </div>
                   <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
                     <span className="biolab-label block mb-2">Modelo natural</span>
-                    <p className="text-sm text-slate-200/85 leading-6">{team?.organism?.name || "Sin modelo elegido"}</p>
+                    <p className="text-sm text-slate-200/85 leading-6">{team?.organism?.name || "Ningún modelo seleccionado"}</p>
                   </div>
                 </div>
               </div>
@@ -78,9 +78,9 @@ export default function VotingScreen({ onNext, onBack }: VotingScreenProps) {
           </motion.div>
 
           <div className="flex justify-center gap-4">
-            <button onClick={onBack} className="biolab-btn-ghost">← Volver al pitch</button>
+            <button onClick={onBack} className="biolab-btn-ghost">← Volver a la presentación</button>
             <button onClick={onNext} className="biolab-btn-primary">
-              Ir al paso 8: ver cierre de sesión
+              Ir al paso 8: ver el resumen de la sesión
               <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
             </button>
           </div>
@@ -94,10 +94,10 @@ export default function VotingScreen({ onNext, onBack }: VotingScreenProps) {
       <div className="biolab-container">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col xl:flex-row xl:items-end xl:justify-between gap-5 mb-8">
           <div>
-            <span className="biolab-phase mb-5 inline-flex">Fase 07 — Votación</span>
-            <h2 className="biolab-section-title mb-3">Ahora elegid la propuesta más prometedora</h2>
+            <span className="biolab-phase mb-5 inline-flex">Etapa 07 — Evaluación</span>
+            <h2 className="biolab-section-title mb-3">Elige ahora la propuesta más prometedora</h2>
             <p className="biolab-subtitle max-w-3xl">
-              Esto no es un examen. Aquí comparáis las propuestas y decidís cuál parece más <strong>sólida</strong>, más <strong>original</strong> y más <strong>útil para Airbus</strong>.
+              Esto no es un examen. Compara las propuestas y decide cuál parece más <strong>sólida</strong>, <strong>original</strong> y <strong>útil para el contexto Airbus</strong>.
             </p>
           </div>
 
@@ -109,7 +109,7 @@ export default function VotingScreen({ onNext, onBack }: VotingScreenProps) {
             </div>
             <div>
               <div className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Votos emitidos</div>
-              <div className="text-sm font-semibold text-foreground">{totalVotes} propuesta(s) valorada(s)</div>
+              <div className="text-sm font-semibold text-foreground">{totalVotes} {totalVotes === 1 ? "propuesta evaluada" : "propuestas evaluadas"}</div>
             </div>
           </div>
         </motion.div>
@@ -119,29 +119,29 @@ export default function VotingScreen({ onNext, onBack }: VotingScreenProps) {
             <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-6 items-start">
               <div>
                 <span className="biolab-label block mb-3" style={{ color: "hsl(45, 95%, 65%)" }}>
-                  Qué tienes que hacer aquí
+                  Qué debes hacer aquí
                 </span>
                 <h3 className="text-2xl md:text-3xl font-bold font-display text-white mb-4">
-                  Compara las propuestas y da un voto a la que mejor cerraría el workshop
+                  Compara las propuestas y vota la que mejor culmina el taller
                 </h3>
                 <p className="text-base md:text-lg leading-8 text-slate-200/90 mb-5">
-                  Lee cada propuesta como si fueras parte de un comité interno de innovación. No votes la más bonita: vota la que combine mejor <strong>claridad</strong>, <strong>lógica biomimética</strong> y <strong>potencial real de piloto</strong>.
+                  Lee cada propuesta como si formaras parte de un comité interno de innovación. No votes la más bonita: elige la que mejor combine <strong>claridad</strong>, <strong>lógica biomimética</strong> y <strong>potencial real de pilotaje</strong>.
                 </p>
                 <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <span className="biolab-label block mb-2">Cómo votar en esta demo</span>
+                  <span className="biolab-label block mb-2">Cómo votar en esta demostración</span>
                   <ul className="space-y-2 text-sm md:text-base text-slate-200/85 leading-7">
                     <li>• Revisa el título, el reto, el modelo natural y el resumen.</li>
-                    <li>• Usa los 3 criterios de la derecha como guía mental.</li>
-                    <li>• Pulsa <strong>“Dar 1 voto”</strong> solo en las propuestas que te parezcan realmente defendibles.</li>
+                    <li>• Utiliza como guía los tres criterios de la derecha.</li>
+                    <li>• Pulsa <strong>«Dar 1 voto»</strong> solo en propuestas que consideres realmente defendibles.</li>
                   </ul>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-1 gap-4">
                 {[
-                  ["Criterio 1", "Viabilidad técnica", "¿Se podría pilotar o analizar en Airbus con un siguiente paso razonable?"],
-                  ["Criterio 2", "Originalidad", "¿La inspiración natural y la traducción a Airbus aportan una idea interesante?"],
-                  ["Criterio 3", "Impacto potencial", "¿Puede mejorar eficiencia, sostenibilidad, mantenimiento o rendimiento?"],
+                  ["Criterio 1", "Viabilidad técnica", "¿Podría pilotarse o analizarse en el contexto Airbus mediante un próximo paso razonable?"],
+                  ["Criterio 2", "Originalidad", "¿La inspiración natural y su traducción a Airbus aportan una idea interesante?"],
+                  ["Criterio 3", "Impacto potencial", "¿Podría mejorar la eficiencia, la sostenibilidad, el mantenimiento o el rendimiento?"],
                 ].map(([step, title, text]) => (
                   <div key={title} className="rounded-2xl border border-white/10 bg-white/5 p-4">
                     <span className="biolab-label block mb-2">{step}</span>
@@ -192,16 +192,16 @@ export default function VotingScreen({ onNext, onBack }: VotingScreenProps) {
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                       <div className="rounded-xl border border-border bg-muted/40 p-3">
-                        <span className="biolab-label block mb-1">Qué deberías valorar al votar</span>
-                        <p className="text-xs text-muted-foreground leading-5"><strong>Viabilidad</strong><br />¿Se entiende un siguiente paso real?</p>
+                        <span className="biolab-label block mb-1">Qué debes evaluar al votar</span>
+                        <p className="text-xs text-muted-foreground leading-5"><strong>Viabilidad</strong><br />¿Está claro un próximo paso realista?</p>
                       </div>
                       <div className="rounded-xl border border-border bg-muted/40 p-3">
                         <span className="biolab-label block mb-1">Originalidad</span>
-                        <p className="text-xs text-muted-foreground leading-5">¿La conexión naturaleza-Airbus tiene sentido y merece revisarse?</p>
+                        <p className="text-xs text-muted-foreground leading-5">¿La conexión naturaleza–Airbus tiene sentido y merece una revisión adicional?</p>
                       </div>
                       <div className="rounded-xl border border-border bg-muted/40 p-3">
                         <span className="biolab-label block mb-1">Impacto</span>
-                        <p className="text-xs text-muted-foreground leading-5">¿Puede aportar mejora tangible?</p>
+                        <p className="text-xs text-muted-foreground leading-5">¿Podría aportar una mejora tangible?</p>
                       </div>
                     </div>
                   </div>
@@ -213,8 +213,8 @@ export default function VotingScreen({ onNext, onBack }: VotingScreenProps) {
                       <div className="h-40 flex items-center justify-center text-muted-foreground text-sm">Sin imagen</div>
                     )}
                     <div className="p-3 border-t border-border">
-                      <span className="biolab-label block mb-1">Marcador actual</span>
-                      <p className="text-sm text-muted-foreground">Votos acumulados</p>
+                      <span className="biolab-label block mb-1">Puntuación actual</span>
+                      <p className="text-sm text-muted-foreground">Votos totales</p>
                       <p className="text-2xl font-display font-bold text-foreground mt-1">{team.votes}</p>
                     </div>
                   </div>
@@ -225,12 +225,12 @@ export default function VotingScreen({ onNext, onBack }: VotingScreenProps) {
                       disabled={ownTeam || alreadyVoted}
                       className={`w-full ${ownTeam || alreadyVoted ? "biolab-btn-ghost opacity-60 cursor-not-allowed" : "biolab-btn-primary"}`}
                     >
-                      {ownTeam ? "No votar" : alreadyVoted ? "Voto emitido" : "Dar 1 voto"}
+                      {ownTeam ? "No puedes votarla" : alreadyVoted ? "Voto emitido" : "Dar 1 voto"}
                     </button>
                     <div className="rounded-xl border border-border bg-muted/40 p-3">
                       <span className="biolab-label block mb-1">Consejo</span>
                       <p className="text-xs text-muted-foreground leading-5">
-                        Vota la propuesta que presentarías a una revisión interna sin necesidad de explicar demasiado contexto extra.
+                        Vota la propuesta que llevarías a una revisión interna sin necesidad de explicar demasiado contexto adicional.
                       </p>
                     </div>
                   </div>
@@ -241,7 +241,7 @@ export default function VotingScreen({ onNext, onBack }: VotingScreenProps) {
         </div>
 
         <div className="flex justify-center gap-4">
-          <button onClick={onBack} className="biolab-btn-ghost">← Volver al pitch</button>
+          <button onClick={onBack} className="biolab-btn-ghost">← Volver a la presentación</button>
           <button onClick={onNext} className="biolab-btn-primary">
             Ir al paso 8: ver resultados
             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
