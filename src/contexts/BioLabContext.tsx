@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useMemo, useState, ReactNode } from "react";
-import { TeamData, Challenge, Organism, createTeam, CanvasData } from "@/data/biolab-data";
+import { TeamData, Challenge, Organism, createTeam, CanvasData, isCanvasEntryReady } from "@/data/biolab-data";
 
 const STORAGE_KEY = "bio-airbus-ignite-es-v2";
 
@@ -57,7 +57,7 @@ function loadStoredSession(): StoredSession {
 }
 
 function canvasIsComplete(team?: TeamData) {
-  return Boolean(team && Object.values(team.canvas).every((value) => value.trim().length > 0));
+  return Boolean(team && (Object.entries(team.canvas) as [keyof CanvasData, string][]).every(([key, value]) => isCanvasEntryReady(key, value)));
 }
 
 function pitchIsComplete(team?: TeamData) {
