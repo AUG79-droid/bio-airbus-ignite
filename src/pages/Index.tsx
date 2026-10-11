@@ -38,7 +38,7 @@ function BioLabApp() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className={currentScreen > 0 ? "pt-16" : ""}
+          className={currentScreen > 0 ? "pt-20" : ""}
         >
           {screens[currentScreen]}
         </motion.div>
