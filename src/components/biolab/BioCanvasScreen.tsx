@@ -1,320 +1,291 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { useBioLab } from "@/contexts/BioLabContext";
-import { CanvasData } from "@/data/biolab-data";
+import { CanvasData, isCanvasEntryReady, isLegacyCanvasExample, MIN_CANVAS_CHARS } from "@/data/biolab-data";
 
 interface BioCanvasScreenProps {
   onNext: () => void;
   onBack: () => void;
 }
 
-const CANVAS_FIELDS: {
+type FieldGuide = {
   key: keyof CanvasData;
-  label: string;
-  sublabel: string;
-  helper: string;
+  short: string;
+  title: string;
+  question: string;
+  explain: string;
+  thinkAbout: string[];
   placeholder: string;
-  span?: boolean;
-}[] = [
+};
+
+const GUIDES: FieldGuide[] = [
   {
-    key: "problem",
-    label: "01 — Define el problema Airbus",
-    sublabel: "¿Qué reto concreto vas a resolver?",
-    helper: "Describe el problema en términos técnicos específicos. Evita las afirmaciones genéricas.",
-    placeholder:
-      "Ejemplo: La cabina necesita una ventilación y un control térmico más eficientes para reducir el consumo energético y mantener el confort sin aumentar la complejidad del sistema.",
+    key: "problem", short: "Problema",
+    title: "Define el problema Airbus",
+    question: "¿Qué necesitas mejorar exactamente y en qué parte de la operación?",
+    explain: "No tienes que inventar una solución todavía. Describe la situación que quieres cambiar y sus límites.",
+    thinkAbout: [
+      "¿Qué equipo, proceso o componente está afectado?",
+      "¿Qué dificultad concreta existe hoy?",
+      "¿Cómo sabrías que se ha producido una mejora?",
+    ],
+    placeholder: "Escribe con tus palabras el problema concreto, dónde ocurre y qué quieres conseguir.",
   },
   {
-    key: "organism",
-    label: "02 — Explica el modelo natural",
-    sublabel: "¿Qué organismo o sistema natural has seleccionado?",
-    helper: "Describe qué hace en la naturaleza y por qué resulta relevante para este reto.",
-    placeholder:
-      "Ejemplo: El termitero regula la temperatura y la ventilación mediante flujos de aire pasivos, sin climatización continua.",
+    key: "organism", short: "Modelo natural",
+    title: "Explica cómo funciona el modelo natural",
+    question: "¿Qué hace este organismo y cómo lo consigue?",
+    explain: "Describe el mecanismo observable en la naturaleza, no simplemente su nombre o apariencia.",
+    thinkAbout: [
+      "¿Qué función realiza?",
+      "¿Qué estructura o comportamiento la hace posible?",
+      "¿Qué evidencia necesitarías para confirmar cómo funciona?",
+    ],
+    placeholder: "Explica la función del organismo y el mecanismo que te interesa estudiar.",
   },
   {
-    key: "principle",
-    label: "03 — Formula el principio que vas a emular",
-    sublabel: "¿Qué mecanismo funcional vas a transferir?",
-    helper: "No copies la forma: identifica la lógica funcional que hay detrás.",
-    placeholder:
-      "Ejemplo: Utilizar circulación pasiva, gradientes térmicos y entradas y salidas de aire optimizadas para estabilizar la temperatura con menos energía.",
+    key: "principle", short: "Principio",
+    title: "Extrae un principio funcional",
+    question: "¿Qué regla de funcionamiento podrías trasladar a ingeniería?",
+    explain: "Traduce la estrategia natural a una función técnica. La semejanza visual no basta.",
+    thinkAbout: [
+      "¿Qué causa el efecto observado en la naturaleza?",
+      "¿Sirve ese mecanismo para el reto elegido? ¿Por qué?",
+      "¿Qué aspecto NO sería trasladable al contexto aeronáutico?",
+    ],
+    placeholder: "Redacta el principio en términos de función, mecanismo y efecto esperado.",
   },
   {
-    key: "solution",
-    label: "04 — Tradúcelo en una solución Airbus",
-    sublabel: "¿Cómo se convierte en una propuesta real?",
-    helper: "Aplica la idea a una pieza, sistema, área o proceso concreto del contexto Airbus.",
-    placeholder:
-      "Ejemplo: Diseñar una arquitectura de ventilación de cabina inspirada en termiteros, con entradas y salidas pasivas optimizadas para reducir la demanda del sistema activo.",
-    span: true,
+    key: "solution", short: "Solución",
+    title: "Propón una aplicación concreta en Airbus",
+    question: "¿Qué cambiarías en un componente, herramienta o proceso y por qué ayudaría?",
+    explain: "Esta es la parte central. Conecta el problema con el mecanismo y formula una hipótesis técnica, todavía no un resultado demostrado.",
+    thinkAbout: [
+      "¿Dónde se aplicaría y qué se modificaría?",
+      "¿Cómo produciría el principio natural la mejora que buscas?",
+      "¿Qué restricciones de seguridad, peso, materiales, certificación o mantenimiento existen?",
+    ],
+    placeholder: "Proponemos modificar [componente/proceso] mediante [mecanismo], porque [relación técnica]. Antes habría que comprobar [restricción].",
   },
   {
-    key: "benefit",
-    label: "05 — Impacto esperado",
-    sublabel: "¿Qué mejora aportaría?",
-    helper: "Considera eficiencia, peso, energía, mantenimiento, confort, robustez o coste.",
-    placeholder:
-      "Ejemplo: Menor consumo energético, mejor distribución térmica y menor dependencia de la climatización activa durante determinadas fases operativas.",
+    key: "benefit", short: "Mejora esperada",
+    title: "Identifica qué mejora esperas comprobar",
+    question: "¿Qué resultado esperarías obtener si tu idea funciona?",
+    explain: "Habla de una mejora hipotética, nunca de un ahorro o beneficio ya conseguido sin datos.",
+    thinkAbout: [
+      "¿Qué indicador compararías con la solución actual?",
+      "¿Qué contrapartidas o efectos no deseados podrían aparecer?",
+      "¿Qué datos te faltan para cuantificar la mejora?",
+    ],
+    placeholder: "La hipótesis es mejorar [indicador] frente a [situación actual], sujeto a comprobar [riesgo o condición].",
   },
   {
-    key: "implementation",
-    label: "06 — Próximo paso",
-    sublabel: "¿Qué validarías primero?",
-    helper: "No planifiques todo el proyecto: céntrate en el primer paso útil de validación.",
-    placeholder:
-      "Ejemplo: Modelizar el flujo de aire mediante CFD y comparar una configuración convencional con una alternativa inspirada en termiteros.",
+    key: "implementation", short: "Primera prueba",
+    title: "Define una primera prueba de viabilidad",
+    question: "¿Qué ensayo o análisis permitiría saber si la propuesta merece avanzar?",
+    explain: "No es un plan de implantación industrial. Elige una comprobación inicial que pueda confirmar o descartar tu hipótesis.",
+    thinkAbout: [
+      "¿Harías primero un ensayo de laboratorio, simulación o prueba comparativa?",
+      "¿Qué variable medirías y frente a qué referencia?",
+      "¿Qué resultado haría que descartaras o revisaras la propuesta?",
+    ],
+    placeholder: "Primero compararíamos [alternativa] con [referencia] mediante [prueba], midiendo [indicador y criterio].",
   },
 ];
 
-function cleanSentence(text?: string) {
-  return (text || "").trim().replace(/\s+/g, " ").replace(/[.]$/, "");
-}
-
-function buildExamples(challenge?: { title?: string; description?: string }, organism?: { name?: string; strategy?: string; principle?: string }) {
-  const challengeTitle = challenge?.title || "el reto Airbus seleccionado";
-  const challengeDescription = cleanSentence(challenge?.description) || "abordar una necesidad técnica específica";
-  const organismName = organism?.name || "el modelo natural seleccionado";
-  const organismStrategy = cleanSentence(organism?.strategy) || "realiza esta función de forma eficiente en la naturaleza";
-  const principle = cleanSentence(organism?.principle) || "un principio biomimético útil";
-
-  return {
-    problem: `El equipo quiere abordar ${challengeTitle.toLowerCase()} en el contexto Airbus. El problema concreto consiste en ${challengeDescription.toLowerCase()} mediante una solución técnicamente viable que no añada complejidad innecesaria.`,
-    organism: `${organismName} resulta relevante porque ${organismStrategy.toLowerCase()}. Es una referencia útil porque realiza con eficiencia una función comparable al reto Airbus.`,
-    principle: `El principio que queremos emular es ${principle.toLowerCase()}. No copiamos la forma del organismo: transferimos la lógica funcional que utiliza para resolver el problema.`,
-    solution: `Proponemos traducir ${principle.toLowerCase()} en una solución Airbus para ${challengeTitle.toLowerCase()}. La idea consiste en diseñar una propuesta técnica inspirada en ${organismName.toLowerCase()} que mejore el rendimiento del sistema sin aumentar significativamente el peso, el consumo energético ni el mantenimiento.`,
-    benefit: `El impacto esperado es mejorar el rendimiento en ${challengeTitle.toLowerCase()}, reducir ineficiencias operativas y aportar una base técnica más sólida para futuros ensayos o pilotos.`,
-    implementation: `Un próximo paso razonable sería realizar una validación inicial: una simulación, una maqueta funcional o un análisis comparativo entre la solución actual y una alternativa inspirada en ${organismName.toLowerCase()}.`,
-  } satisfies Record<keyof CanvasData, string>;
-}
-
 export default function BioCanvasScreen({ onNext, onBack }: BioCanvasScreenProps) {
-  const { activeTeam, updateCanvas } = useBioLab();
+  const { activeTeam, updateCanvas, setScreen } = useBioLab();
+  const [activeIndex, setActiveIndex] = useState(0);
   if (!activeTeam) return null;
 
-  const completedFields = CANVAS_FIELDS.filter((f) => activeTeam.canvas[f.key].trim().length > 0).length;
-  const canContinue = completedFields === CANVAS_FIELDS.length;
   const challenge = activeTeam.challenge;
   const organism = activeTeam.organism;
-  const examples = buildExamples(challenge, organism);
-
-  const injectExample = (key: keyof CanvasData) => {
-    if (!activeTeam.canvas[key].trim()) {
-      updateCanvas(key, examples[key]);
-    }
-  };
+  const current = GUIDES[activeIndex];
+  const answer = activeTeam.canvas[current.key];
+  const count = GUIDES.filter((guide) => isCanvasEntryReady(guide.key, activeTeam.canvas[guide.key])).length;
+  const canContinue = count === GUIDES.length;
+  const isLegacy = isLegacyCanvasExample(current.key, answer);
+  const isReady = isCanvasEntryReady(current.key, answer);
+  const suspectPair = challenge?.id === "c7" && organism?.id === "o4";
 
   return (
-    <div className="min-h-screen flex flex-col py-20 biolab-grid-pattern">
+    <div className="min-h-screen py-20 biolab-grid-pattern">
       <div className="biolab-container">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
+        <motion.header
+          initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col xl:flex-row xl:items-end xl:justify-between gap-5 mb-8"
+          className="max-w-6xl mx-auto mb-6"
         >
-          <div>
-            <span className="biolab-phase mb-4 inline-flex">Etapa 05 — Diseño</span>
-            <h2 className="biolab-section-title mb-3">Convierte ahora tu idea en una propuesta</h2>
-            <p className="biolab-subtitle max-w-3xl">
-              Este es el paso 5 de 6. Define <strong>qué problema vas a resolver</strong>, <strong>qué principio natural vas a emular</strong> y <strong>cómo lo traducirás al contexto Airbus</strong>.
+          <span className="biolab-phase mb-4 inline-flex">Etapa 05 de 06 · Diseña tu solución</span>
+          <h1 className="biolab-section-title mb-3">Ahora te toca crear la propuesta</h1>
+          <p className="biolab-subtitle max-w-4xl">
+            Tu misión es explicar <strong>cómo una estrategia de la naturaleza podría resolver
+            un problema real del contexto Airbus</strong>. Completarás seis apartados, uno a uno,
+            con tus propias respuestas. No hay una solución automática ni una respuesta correcta predefinida.
+          </p>
+        </motion.header>
+
+        <section className="max-w-6xl mx-auto biolab-card-dark mb-6" aria-label="Instrucciones del lienzo">
+          <h2 className="text-xl md:text-2xl font-display font-bold text-white mb-3">
+            ¿Qué tengo que hacer en esta pantalla?
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-slate-100 leading-7">
+            <p><strong className="text-amber-300">1. Lee</strong> el reto y el modelo natural que elegiste.</p>
+            <p><strong className="text-amber-300">2. Escribe</strong> una respuesta propia en cada apartado. Las pistas no escriben por ti.</p>
+            <p><strong className="text-amber-300">3. Revisa</strong> que la relación técnica tenga sentido y pasa a preparar tu presentación.</p>
+          </div>
+          <p className="mt-4 text-sm md:text-base text-slate-300">
+            Tus respuestas se guardan en este navegador mientras escribes. El indicador de avance solo
+            comprueba que hayas redactado los apartados; <strong>no certifica que la propuesta sea viable</strong>.
+          </p>
+        </section>
+
+        <section className="max-w-6xl mx-auto biolab-card mb-6" aria-label="Tus selecciones anteriores">
+          <h2 className="text-xl font-display font-bold text-foreground mb-4">Este es tu punto de partida (ya seleccionado)</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="rounded-xl border border-border bg-muted/30 p-4">
+              <span className="biolab-label block mb-2">Reto Airbus</span>
+              <h3 className="text-lg font-semibold">{challenge?.title ?? "Sin reto"}</h3>
+              <p className="text-sm md:text-base text-muted-foreground mt-2 leading-relaxed">{challenge?.description}</p>
+            </div>
+            <div className="rounded-xl border border-border bg-muted/30 p-4">
+              <span className="biolab-label block mb-2">Inspiración natural</span>
+              <h3 className="text-lg font-semibold">{organism?.name ?? "Sin modelo"}</h3>
+              <p className="text-sm md:text-base text-muted-foreground mt-2 leading-relaxed">{organism?.strategy}</p>
+            </div>
+            <div className="rounded-xl border border-border bg-muted/30 p-4">
+              <span className="biolab-label block mb-2">Principio observado</span>
+              <h3 className="text-lg font-semibold">{organism?.principle ?? "Sin principio"}</h3>
+              <p className="text-sm md:text-base text-muted-foreground mt-2 leading-relaxed">
+                Tu trabajo es justificar <strong>si ese principio sirve para el reto</strong>, no asumir que encaja.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {suspectPair && (
+          <section className="max-w-6xl mx-auto rounded-2xl border-2 border-amber-500 bg-amber-50 px-5 py-5 mb-6 text-slate-900" role="status">
+            <h2 className="text-lg font-bold mb-2">Atención: esta conexión no está justificada todavía</h2>
+            <p className="text-base leading-7 mb-4">
+              La piel de tiburón puede inspirar superficies que modifican la fricción o la adhesión.
+              Eso <strong>no demuestra por sí mismo que agilice una inspección no destructiva del fuselaje</strong>.
+              Para continuar con esta combinación, necesitas explicar un mecanismo concreto y cómo lo comprobarías.
+              Si buscas inspiración para detectar defectos, el <strong>murciélago y la ecolocalización</strong>
+              podrían ofrecer un punto de partida más relacionado con la detección no invasiva, pero también
+              requerirían una justificación y validación técnica.
             </p>
-          </div>
+            <button type="button" className="biolab-btn-primary" onClick={() => setScreen(4)}>
+              Elegir otro modelo natural
+            </button>
+          </section>
+        )}
 
-          <div className="flex items-center gap-3 bg-card border border-border rounded-2xl px-4 py-3 shadow-sm">
-            <div className="flex gap-1.5">
-              {CANVAS_FIELDS.map((f) => (
-                <div
-                  key={f.key}
-                  className={`w-2.5 h-7 rounded-sm ${activeTeam.canvas[f.key].trim() ? "bg-success" : "bg-border"}`}
-                />
-              ))}
-            </div>
+        <section className="max-w-6xl mx-auto biolab-card mb-6" aria-label="Editor del lienzo">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-5">
             <div>
-              <div className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Bloques completados</div>
-              <div className="text-sm font-semibold text-foreground">{completedFields}/{CANVAS_FIELDS.length}</div>
+              <h2 className="text-xl font-display font-bold">Tu propuesta, apartado {activeIndex + 1} de 6</h2>
+              <p className="text-sm md:text-base text-muted-foreground">
+                {count} de 6 apartados con texto propio suficiente. Puedes volver y editar cualquiera.
+              </p>
             </div>
+            <div aria-live="polite" className="text-base font-semibold text-primary">{count}/6 redactados</div>
           </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="max-w-6xl mx-auto mb-8"
-        >
-          <div className="biolab-card-dark px-6 py-6">
-            <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-6 items-start">
-              <div>
-                <span className="biolab-label block mb-3" style={{ color: "hsl(45, 95%, 65%)" }}>
-                  Qué debes hacer aquí
-                </span>
-                <h3 className="text-2xl md:text-3xl font-bold font-display text-white mb-4">
-                  Construye tu propuesta con lógica Airbus, no con afirmaciones vagas
-                </h3>
-                <p className="text-base md:text-lg leading-8 text-slate-200/90 mb-5">
-                  Has seleccionado un <strong>reto</strong> y un <strong>modelo natural</strong>. Redacta ahora una propuesta que otras personas puedan comprender, defender y presentar. No busques la perfección: empieza por los tres primeros bloques y después concreta la solución.
-                </p>
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <span className="biolab-label block mb-2">Orden recomendado</span>
-                  <ul className="space-y-2 text-sm md:text-base text-slate-200/85 leading-7">
-                    <li>• Empieza por <strong>01 Problema</strong>, <strong>02 Modelo biológico</strong> y <strong>03 Principio</strong>.</li>
-                    <li>• Continúa con <strong>04 Solución propuesta</strong>, el apartado más importante.</li>
-                    <li>• Termina con <strong>05 Impacto esperado</strong> y <strong>06 Próximo paso</strong>.</li>
-                  </ul>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 gap-4">
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <span className="biolab-label block mb-2">Paso 1</span>
-                  <p className="text-sm text-slate-200/80 leading-6">
-                    Comprueba que el <strong>reto</strong>, el <strong>modelo natural</strong> y el <strong>principio</strong> encajan entre sí.
-                  </p>
-                </div>
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <span className="biolab-label block mb-2">Paso 2</span>
-                  <p className="text-sm text-slate-200/80 leading-6">
-                    Si te bloqueas, utiliza los <strong>ejemplos iniciales</strong> inferiores y adáptalos a tu caso.
-                  </p>
-                </div>
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <span className="biolab-label block mb-2">Paso 3</span>
-                  <p className="text-sm text-slate-200/80 leading-6">
-                    Cuando los seis bloques estén suficientemente claros, utiliza el botón azul para pasar a la <strong>presentación</strong>.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-6xl mx-auto mb-8">
-          <div className="grid grid-cols-1 xl:grid-cols-[1.1fr_340px] gap-5 items-stretch">
-            <div className="biolab-card p-5">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="rounded-2xl border border-border bg-background/70 p-4">
-                  <span className="biolab-label block mb-2">Reto que vas a resolver</span>
-                  <h4 className="text-lg font-semibold font-display text-foreground mb-2">{challenge?.title ?? "—"}</h4>
-                  <p className="text-sm text-muted-foreground leading-6">{challenge?.description ?? "—"}</p>
-                </div>
-                <div className="rounded-2xl border border-border bg-background/70 p-4">
-                  <span className="biolab-label block mb-2">Modelo natural seleccionado</span>
-                  <h4 className="text-lg font-semibold font-display text-foreground mb-3">{organism?.name ?? "—"}</h4>
-                  <p className="text-sm text-muted-foreground leading-6">{organism?.strategy ?? "—"}</p>
-                </div>
-                <div className="rounded-2xl border border-border bg-background/70 p-4">
-                  <span className="biolab-label block mb-2">Principio que vas a transferir</span>
-                  <h4 className="text-lg font-semibold font-display text-foreground mb-2">{organism?.principle ?? "—"}</h4>
-                  <p className="text-sm text-muted-foreground leading-6">Este es el mecanismo funcional que ahora convertirás en una solución aplicable al contexto Airbus.</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="biolab-card overflow-hidden p-0">
-              {organism?.image ? (
-                <img
-                  src={organism.image}
-                  alt={organism.name}
-                  className="w-full h-full min-h-[240px] object-cover"
-                  referrerPolicy="no-referrer"
-                />
-              ) : (
-                <div className="min-h-[240px] flex items-center justify-center text-muted-foreground">Sin imagen</div>
-              )}
-            </div>
-          </div>
-        </motion.div>
-
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="max-w-6xl mx-auto mb-8">
-          <div className="biolab-card p-5">
-            <div className="flex items-start justify-between gap-4 flex-wrap mb-4">
-              <div>
-                <span className="biolab-label block mb-2">Ejemplos iniciales para desbloquear el lienzo</span>
-                <h3 className="text-xl font-display font-bold text-foreground">No los copies literalmente: adáptalos a tu caso</h3>
-              </div>
-              <div className="text-sm text-muted-foreground max-w-xl">
-                Se generan a partir de tu <strong>reto Airbus</strong>, el <strong>modelo natural seleccionado</strong> y el <strong>principio biomimético</strong>.
-              </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-              {CANVAS_FIELDS.map((field) => (
-                <div key={field.key} className="rounded-2xl border border-border bg-background/70 p-4 flex flex-col gap-3">
-                  <div>
-                    <h4 className="text-sm font-semibold font-display text-foreground">{field.label}</h4>
-                    <p className="text-xs text-muted-foreground mt-1">{field.sublabel}</p>
-                  </div>
-                  <p className="text-sm leading-6 text-muted-foreground">{examples[field.key]}</p>
-                  <button
-                    type="button"
-                    onClick={() => injectExample(field.key)}
-                    className="biolab-btn-ghost self-start"
-                  >
-                    Utilizar este ejemplo inicial
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        </motion.div>
-
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="max-w-6xl mx-auto mb-8">
-          <div className="biolab-rubric">
-            <div>
-              <span className="biolab-label block mb-2">Control de calidad</span>
-              <h3 className="text-lg font-display font-bold text-foreground">Un concepto sólido debe superar cuatro comprobaciones</h3>
-            </div>
-            {[
-              ["Específico", "Un problema técnico delimitado"],
-              ["Causal", "El mecanismo explica el efecto"],
-              ["Sujeto a restricciones", "Considera seguridad, masa y operaciones"],
-              ["Verificable", "Un primer experimento medible"],
-            ].map(([title, text]) => (
-              <div key={title} className="biolab-rubric-item"><strong>{title}</strong><span>{text}</span></div>
-            ))}
-          </div>
-        </motion.div>
-
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-5 mb-12">
-          {CANVAS_FIELDS.map((field, i) => (
-            <motion.div
-              key={field.key}
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.05 }}
-              className={`biolab-card ${field.span ? "md:col-span-2" : ""}`}
-            >
-              <div className="mb-3 flex items-start justify-between gap-3 flex-wrap">
-                <div>
-                  <h3 className="text-sm font-semibold font-display text-foreground">{field.label}</h3>
-                  <p className="text-xs text-muted-foreground mt-0.5">{field.sublabel}</p>
-                </div>
+          <nav className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 mb-7" aria-label="Apartados del lienzo">
+            {GUIDES.map((guide, index) => {
+              const ready = isCanvasEntryReady(guide.key, activeTeam.canvas[guide.key]);
+              return (
                 <button
+                  key={guide.key}
                   type="button"
-                  onClick={() => injectExample(field.key)}
-                  className="biolab-btn-ghost"
+                  onClick={() => setActiveIndex(index)}
+                  aria-current={index === activeIndex ? "step" : undefined}
+                  className={`rounded-xl border p-3 text-left text-sm md:text-base font-semibold transition-colors ${index === activeIndex ? "bg-primary text-primary-foreground border-primary" : "bg-background border-border hover:border-primary/40 text-foreground"}`}
                 >
-                  Insertar ejemplo
+                  <span className="block text-xs mb-1">{String(index + 1).padStart(2, "0")} · {ready ? "✓ Redactado" : "Pendiente"}</span>
+                  {guide.short}
                 </button>
-              </div>
-              <div className="rounded-xl border border-border/80 bg-background/60 px-3 py-2 mb-3">
-                <p className="text-xs text-muted-foreground leading-5">{field.helper}</p>
-              </div>
-              <textarea
-                value={activeTeam.canvas[field.key]}
-                onChange={(e) => updateCanvas(field.key, e.target.value)}
-                placeholder={field.placeholder}
-                rows={field.span ? 5 : 4}
-                className="biolab-input resize-none text-sm leading-relaxed"
-              />
-            </motion.div>
-          ))}
-        </div>
+              );
+            })}
+          </nav>
 
-        <div className="flex justify-center gap-4 flex-wrap">
-          <button onClick={onBack} className="biolab-btn-ghost">← Volver a la conexión</button>
-          <button onClick={onNext} className="biolab-btn-primary" disabled={!canContinue} title={!canContinue ? "Completa los seis bloques del lienzo para continuar" : undefined}>
-            Ir al paso 6: preparar la presentación
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+          <div className="rounded-2xl border border-primary/20 bg-primary/5 p-5 md:p-7">
+            <span className="biolab-label block mb-2">Apartado {String(activeIndex + 1).padStart(2, "0")}</span>
+            <h3 className="text-2xl font-bold font-display mb-3">{current.title}</h3>
+            <p className="text-lg md:text-xl font-semibold mb-3">{current.question}</p>
+            <p className="text-base text-muted-foreground leading-7 mb-5">{current.explain}</p>
+            <details className="rounded-xl border border-border bg-card p-4 mb-5">
+              <summary className="cursor-pointer text-base font-semibold text-primary">Ver pistas para pensar (no rellenan tu respuesta)</summary>
+              <ul className="mt-3 pl-5 list-disc space-y-2 text-base text-foreground leading-7">
+                {current.thinkAbout.map((item) => <li key={item}>{item}</li>)}
+              </ul>
+            </details>
+
+            <label htmlFor={`canvas-${current.key}`} className="block font-semibold text-base mb-2">
+              Tu respuesta (escríbela aquí):
+            </label>
+            <textarea
+              id={`canvas-${current.key}`}
+              value={answer}
+              onChange={(event) => updateCanvas(current.key, event.target.value)}
+              placeholder={current.placeholder}
+              rows={7}
+              className="biolab-input resize-y text-base md:text-lg leading-relaxed min-h-[180px] bg-white"
+            />
+            {isLegacy && (
+              <p className="mt-3 rounded-lg border border-amber-400 bg-amber-100 px-4 py-3 text-base text-amber-950" role="status">
+                Este campo contiene un texto introducido mediante un ejemplo automático de la versión anterior.
+                Se ha conservado, pero <strong>debes reformularlo con tu propia explicación</strong> para marcarlo como redactado.
+              </p>
+            )}
+            <div className="flex flex-wrap justify-between gap-3 mt-3 text-sm md:text-base">
+              <span className="text-muted-foreground" aria-live="polite">
+                {isReady ? "✓ Apartado redactado. Revisa la calidad técnica antes de continuar." : isLegacy
+                  ? "Pendiente de reformulación"
+                  : `Escribe al menos ${MIN_CANVAS_CHARS} caracteres para registrar este apartado.`}
+              </span>
+              <span className="text-muted-foreground">{answer.trim().length} caracteres</span>
+            </div>
+          </div>
+
+          <div className="mt-6 flex items-center justify-between gap-3 flex-wrap">
+            <button type="button" className="biolab-btn-ghost" disabled={activeIndex === 0} onClick={() => setActiveIndex((n) => Math.max(0, n - 1))}>
+              ← Apartado anterior
+            </button>
+            <button type="button" className="biolab-btn-primary" disabled={activeIndex === GUIDES.length - 1} onClick={() => setActiveIndex((n) => Math.min(GUIDES.length - 1, n + 1))}>
+              Siguiente apartado →
+            </button>
+          </div>
+        </section>
+
+        <section className="max-w-6xl mx-auto rounded-2xl border border-border bg-white px-5 py-5 mb-7">
+          <h2 className="text-lg font-bold mb-3">Antes de presentarla, comprueba tu propuesta</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-base leading-7">
+            <p>✓ Has definido un problema técnico concreto.</p>
+            <p>✓ Has explicado <strong>cómo</strong> el mecanismo natural podría ayudar.</p>
+            <p>✓ La solución contempla restricciones de seguridad y operación.</p>
+            <p>✓ Propones una prueba que pueda confirmar o descartar la hipótesis.</p>
+          </div>
+          <p className="text-sm md:text-base text-muted-foreground mt-3">
+            Estas son preguntas de revisión personal, no verificaciones automáticas.
+          </p>
+        </section>
+
+        <div className="max-w-6xl mx-auto flex flex-wrap justify-center items-center gap-4 pb-10">
+          <button type="button" onClick={onBack} className="biolab-btn-ghost">← Volver a la conexión</button>
+          <button
+            type="button"
+            onClick={onNext}
+            className="biolab-btn-primary"
+            disabled={!canContinue}
+            title={!canContinue ? "Redacta los seis apartados con tus propias palabras para preparar la presentación." : undefined}
+          >
+            Ya he redactado los seis apartados · Preparar presentación →
           </button>
-          {!canContinue && <p className="w-full text-center text-xs text-muted-foreground">Completa {CANVAS_FIELDS.length - completedFields} {CANVAS_FIELDS.length - completedFields === 1 ? "bloque pendiente" : "bloques pendientes"} del lienzo para desbloquear la presentación.</p>}
+          {!canContinue && (
+            <p className="w-full text-center text-sm md:text-base text-muted-foreground" role="status">
+              Faltan {GUIDES.length - count} apartados por redactar o reformular. No necesitas copiar ningún ejemplo.
+            </p>
+          )}
         </div>
       </div>
     </div>
