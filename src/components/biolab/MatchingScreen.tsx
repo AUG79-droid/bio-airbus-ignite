@@ -26,7 +26,7 @@ export default function MatchingScreen({ onNext, onBack }: MatchingScreenProps) 
           <span className="biolab-phase mb-5 inline-flex">Etapa 04 — Conexión</span>
           <h2 className="biolab-section-title mb-3">Conecta el reto, la naturaleza y el principio</h2>
           <p className="biolab-subtitle max-w-3xl mx-auto">
-            Este paso no consiste en adivinar. Establece la <strong>idea guía</strong> que tu equipo llevará al lienzo.
+            Esta es una pantalla de <strong>revisión, no de escritura</strong>. Comprueba si el mecanismo natural podría ayudar al reto. Si no hay conexión técnica clara, vuelve a elegir modelo. <strong>En el Lienzo escribirás tu propuesta</strong>.
           </p>
         </motion.div>
 
