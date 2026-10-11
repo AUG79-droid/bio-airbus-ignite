@@ -86,6 +86,36 @@ export default function HowItWorksScreen({ onNext, onBack }: HowItWorksScreenPro
           </div>
         </motion.section>
 
+        <motion.section initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="max-w-5xl mx-auto biolab-card mb-8">
+          <span className="biolab-label block mb-2">Un ejemplo trabajado para entender el juego</span>
+          <h3 className="text-xl md:text-2xl font-display font-bold text-foreground mb-3">
+            Ejemplo: estudiar una ventilación de cabina más eficiente a partir de la estrategia de un termitero
+          </h3>
+          <p className="text-base leading-7 text-muted-foreground mb-5">
+            Este es <strong>un ejemplo independiente</strong>, no una respuesta para copiar ni una tecnología
+            aprobada. En el juego crearás tus propias respuestas según el reto y el modelo que selecciones.
+          </p>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[
+              ["01 · Problema", "Estudiar cómo reducir las pérdidas de carga de los conductos de ventilación sin perjudicar caudales, confort ni requisitos de seguridad."],
+              ["02 · Naturaleza", "Los termiteros emplean geometría e intercambios de aire relacionados con diferencias térmicas para regular condiciones internas."],
+              ["03 · Principio", "Estudiar cómo la geometría de los canales puede guiar el flujo y gestionar las pérdidas de presión."],
+              ["04 · Propuesta", "Investigar configuraciones de conductos inspiradas en esa estrategia, integradas en el sistema de ventilación aeronáutico; no sustituir el sistema por ventilación pasiva."],
+              ["05 · Beneficio hipotético", "Comprobar si disminuyen las pérdidas de carga y la demanda de energía sin cambiar el caudal requerido."],
+              ["06 · Primera prueba", "Comparar mediante simulación y ensayo una geometría convencional y otra propuesta al mismo caudal, midiendo presión, energía y distribución del aire."],
+            ].map(([title, description]) => (
+              <div key={title} className="rounded-xl border border-border bg-muted/30 p-4">
+                <h4 className="font-semibold text-foreground mb-2">{title}</h4>
+                <p className="text-sm md:text-base text-muted-foreground leading-7">{description}</p>
+              </div>
+            ))}
+          </div>
+          <p className="mt-5 text-base leading-7 font-semibold text-foreground">
+            Tu tarea real será elaborar una hipótesis de este tipo. La aplicación no escribe la propuesta
+            por ti, y completar los campos no equivale a validar su viabilidad.
+          </p>
+        </motion.section>
+
         <div className="max-w-3xl mx-auto rounded-2xl border border-primary/15 bg-primary/5 p-5 mb-12">
           <h3 className="text-base font-semibold text-foreground mb-2">Resultado esperado</h3>
           <p className="text-sm leading-7 text-muted-foreground">
