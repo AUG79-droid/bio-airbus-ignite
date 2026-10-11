@@ -13,6 +13,7 @@ export default function MatchingScreen({ onNext, onBack }: MatchingScreenProps) 
   const challenge = activeTeam.challenge;
   const organism = activeTeam.organism;
   const principle = activeTeam.organism?.principle;
+  const needsJustification = challenge?.id === "c7" && organism?.id === "o4";
 
   return (
     <div className="min-h-screen flex flex-col justify-center py-20 biolab-grid-pattern">
@@ -44,7 +45,7 @@ export default function MatchingScreen({ onNext, onBack }: MatchingScreenProps) 
                   Convierte tu selección en una formulación de trabajo clara
                 </h3>
                 <p className="text-base md:text-lg leading-8 text-slate-200/90 mb-5">
-                  Has seleccionado un <strong>reto Airbus</strong> y un <strong>modelo natural</strong>. La aplicación muestra ahora la conexión entre ambos para que comprendas <strong>qué principio vas a transferir</strong> antes de abrir el lienzo.
+                  Has seleccionado un <strong>reto Airbus</strong> y un <strong>modelo natural</strong>. La aplicación reúne tus selecciones, pero <strong>no comprueba que sean compatibles</strong>. Antes de diseñar, debes averiguar si el mecanismo natural podría resolver realmente el reto Airbus y explicar por qué.
                 </p>
                 <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
                   <span className="biolab-label block mb-2">Qué debes comprobar</span>
@@ -78,6 +79,22 @@ export default function MatchingScreen({ onNext, onBack }: MatchingScreenProps) 
               </div>
             </div>
           </motion.div>
+
+          {needsJustification && (
+            <section className="rounded-2xl border-2 border-amber-500 bg-amber-50 p-5 text-slate-900" role="status">
+              <h3 className="font-bold text-xl mb-2">¿Esta combinación resuelve realmente el reto?</h3>
+              <p className="text-base leading-7 mb-3">
+                Has elegido inspección no destructiva del fuselaje y piel de tiburón. La microtextura
+                de la piel de tiburón se relaciona con fricción y adhesión; <strong>no explica por sí sola
+                cómo detectar defectos internos ni acelerar la inspección</strong>. Necesitas justificar
+                un mecanismo aplicable y proponer una prueba, o elegir un modelo más relacionado con detección,
+                como el murciélago (ecolocalización). No se presenta como una solución ya validada.
+              </p>
+              <button type="button" className="biolab-btn-primary" onClick={onBack}>
+                Revisar los modelos naturales
+              </button>
+            </section>
+          )}
 
           <motion.div
             initial={{ opacity: 0, y: 18 }}
