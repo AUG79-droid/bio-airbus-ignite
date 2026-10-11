@@ -618,3 +618,14 @@
     print-color-adjust: exact;
   }
 }
+
+/* Accessible application header: avoid shrinking the logo and navigation to unreadable text. */
+.biolab-topbar .biolab-container { max-width: none; width: 100%; padding-left: clamp(12px, 2vw, 32px); padding-right: clamp(12px, 2vw, 32px); }
+.biolab-topbar .biolab-route-step { font-size: 13px; padding: 10px 8px; gap: 8px; white-space: nowrap; }
+.biolab-topbar .biolab-route-dot { width: 27px; height: 27px; font-size: 12px; flex-shrink: 0; }
+.biolab-topbar .biolab-nav-select { font-size: 15px; min-height: 44px; }
+.biolab-topbar .biolab-team-select { font-size: 14px; min-height: 44px; }
+.biolab-topbar .biolab-icon-btn { width: 44px; height: 44px; }
+.biolab-topbar button:focus-visible,.biolab-topbar select:focus-visible { outline: 3px solid hsl(var(--primary)); outline-offset: 2px; }
+.biolab-card-dark .biolab-label { color: #e2e8f0; opacity: 1; }
+@media (max-width: 640px) { .biolab-topbar .biolab-container { gap: 7px; } }
