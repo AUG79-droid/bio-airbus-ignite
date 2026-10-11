@@ -52,22 +52,22 @@ export default function NatureLibrary({ onNext, onBack }: NatureLibraryProps) {
             <div className="flex flex-wrap items-start gap-6">
               <div className="min-w-[180px]">
                 <span className="biolab-label block mb-2" style={{ color: "hsl(45, 95%, 65%)" }}>Qué debes hacer aquí</span>
-                <p className="text-sm leading-6" style={{ color: "hsl(210, 15%, 78%)" }}>
+                <p className="text-base leading-7 text-white">
                   Examina las imágenes, lee cada estrategia y elige <strong>un único modelo natural</strong> para tu equipo.
                 </p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 flex-1">
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <div className="rounded-2xl border border-white/25 bg-white/10 p-4">
                   <span className="biolab-label block mb-2">Paso 1</span>
-                  <p className="text-sm text-muted-foreground">Revisa dos o tres fichas y valora qué función natural resulta más relevante para tu reto.</p>
+                  <p className="text-base text-slate-100 leading-7">Revisa dos o tres fichas y valora qué función natural resulta más relevante para tu reto.</p>
                 </div>
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <div className="rounded-2xl border border-white/25 bg-white/10 p-4">
                   <span className="biolab-label block mb-2">Paso 2</span>
-                  <p className="text-sm text-muted-foreground">Pulsa <strong>«Elegir este modelo»</strong> en la ficha que mejor encaje.</p>
+                  <p className="text-base text-slate-100 leading-7">Pulsa <strong>«Elegir este modelo»</strong> en la ficha que mejor encaje.</p>
                 </div>
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <div className="rounded-2xl border border-white/25 bg-white/10 p-4">
                   <span className="biolab-label block mb-2">Paso 3</span>
-                  <p className="text-sm text-muted-foreground">Cuando lo tengas claro, utiliza el botón azul inferior para continuar.</p>
+                  <p className="text-base text-slate-100 leading-7">Cuando lo tengas claro, utiliza el botón azul inferior para continuar.</p>
                 </div>
               </div>
             </div>
