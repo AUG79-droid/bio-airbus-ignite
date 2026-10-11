@@ -57,21 +57,21 @@ export default function NatureLibrary({ onNext, onBack }: NatureLibraryProps) {
                 <div className="min-w-0 rounded-2xl border border-white/20 bg-white/[0.08] px-5 py-5 md:px-6 md:py-6">
                   <div className="mb-4 flex items-center gap-3">
                     <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-sky-300/45 bg-sky-300/10 text-base font-bold text-sky-200">01</span>
-                    <span className="text-sm font-bold uppercase tracking-wide text-sky-200">Paso 1</span>
+                    <span className="text-sm font-bold uppercase tracking-wide text-sky-200">Explora los modelos</span>
                   </div>
                   <p className="text-base leading-7 text-slate-100">Revisa dos o tres fichas y valora qué función natural resulta más relevante para tu reto.</p>
                 </div>
                 <div className="min-w-0 rounded-2xl border border-white/20 bg-white/[0.08] px-5 py-5 md:px-6 md:py-6">
                   <div className="mb-4 flex items-center gap-3">
                     <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-sky-300/45 bg-sky-300/10 text-base font-bold text-sky-200">02</span>
-                    <span className="text-sm font-bold uppercase tracking-wide text-sky-200">Paso 2</span>
+                    <span className="text-sm font-bold uppercase tracking-wide text-sky-200">Elige una opción</span>
                   </div>
                   <p className="text-base leading-7 text-slate-100">Pulsa <strong>«Elegir este modelo»</strong> en la ficha que mejor encaje.</p>
                 </div>
                 <div className="min-w-0 rounded-2xl border border-white/20 bg-white/[0.08] px-5 py-5 md:px-6 md:py-6">
                   <div className="mb-4 flex items-center gap-3">
                     <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-sky-300/45 bg-sky-300/10 text-base font-bold text-sky-200">03</span>
-                    <span className="text-sm font-bold uppercase tracking-wide text-sky-200">Paso 3</span>
+                    <span className="text-sm font-bold uppercase tracking-wide text-sky-200">Continúa al siguiente paso</span>
                   </div>
                   <p className="text-base leading-7 text-slate-100">Cuando lo tengas claro, utiliza el botón azul inferior para continuar.</p>
                 </div>
