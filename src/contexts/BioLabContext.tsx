@@ -27,6 +27,8 @@ interface BioLabState extends StoredSession {
   canAccessScreen: (screen: number) => boolean;
   maxAccessibleScreen: number;
   activeTeam: TeamData | undefined;
+  guideSubstep: number;
+  setGuideSubstep: (step: number) => void;
   isCanvasComplete: (team?: TeamData) => boolean;
   isPitchComplete: (team?: TeamData) => boolean;
 }
@@ -88,6 +90,7 @@ export function BioLabProvider({ children }: { children: ReactNode }) {
   const [teams, setTeams] = useState<TeamData[]>(initialSession.teams);
   const [activeTeamIndex, setActiveTeamIndex] = useState(initialSession.activeTeamIndex);
   const [reviewCompleted, setReviewCompleted] = useState(initialSession.reviewCompleted);
+  const [guideSubstep, setGuideSubstep] = useState(0);
 
   const activeTeam = teams[activeTeamIndex];
   const maxAccessibleScreen = useMemo(
@@ -183,6 +186,7 @@ export function BioLabProvider({ children }: { children: ReactNode }) {
     setTeams([]);
     setActiveTeamIndex(0);
     setReviewCompleted(false);
+    setGuideSubstep(0);
   };
 
   return (
@@ -208,6 +212,8 @@ export function BioLabProvider({ children }: { children: ReactNode }) {
         canAccessScreen: (screen) => screen <= 2 || screen <= maxAccessibleScreen,
         maxAccessibleScreen,
         activeTeam,
+        guideSubstep,
+        setGuideSubstep,
         isCanvasComplete: canvasIsComplete,
         isPitchComplete: pitchIsComplete,
       }}
