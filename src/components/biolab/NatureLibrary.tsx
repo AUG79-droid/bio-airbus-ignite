@@ -48,28 +48,33 @@ export default function NatureLibrary({ onNext, onBack }: NatureLibraryProps) {
         )}
 
         <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="max-w-5xl mx-auto mb-8">
-          <div className="biolab-card-dark px-6 py-5">
-            <div className="flex flex-wrap items-start gap-6">
-              <div className="min-w-[180px]">
-                <span className="biolab-label block mb-2" style={{ color: "hsl(45, 95%, 65%)" }}>Qué debes hacer aquí</span>
-                <p className="text-base leading-7 text-white">
-                  Examina las imágenes, lee cada estrategia y elige <strong>un único modelo natural</strong> para tu equipo.
-                </p>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 flex-1">
-                <div className="rounded-2xl border border-white/25 bg-white/10 p-4">
-                  <span className="biolab-label block mb-2">Paso 1</span>
-                  <p className="text-base text-slate-100 leading-7">Revisa dos o tres fichas y valora qué función natural resulta más relevante para tu reto.</p>
+          <div className="biolab-card-dark px-5 py-6 md:px-8 md:py-8">
+            <div className="mb-6 border-b border-white/20 pb-6">
+              <span className="biolab-label mb-3 block" style={{ color: "hsl(45, 95%, 65%)" }}>Qué debes hacer aquí</span>
+              <p className="max-w-4xl text-base md:text-lg leading-8 text-white">Examina las imágenes, lee cada estrategia y elige <strong>un único modelo natural</strong> para tu equipo.</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5" aria-label="Pasos para elegir modelo natural">
+                <div className="min-w-0 rounded-2xl border border-white/20 bg-white/[0.08] px-5 py-5 md:px-6 md:py-6">
+                  <div className="mb-4 flex items-center gap-3">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-sky-300/45 bg-sky-300/10 text-base font-bold text-sky-200">01</span>
+                    <span className="text-sm font-bold uppercase tracking-wide text-sky-200">Paso 1</span>
+                  </div>
+                  <p className="text-base leading-7 text-slate-100">Revisa dos o tres fichas y valora qué función natural resulta más relevante para tu reto.</p>
                 </div>
-                <div className="rounded-2xl border border-white/25 bg-white/10 p-4">
-                  <span className="biolab-label block mb-2">Paso 2</span>
-                  <p className="text-base text-slate-100 leading-7">Pulsa <strong>«Elegir este modelo»</strong> en la ficha que mejor encaje.</p>
+                <div className="min-w-0 rounded-2xl border border-white/20 bg-white/[0.08] px-5 py-5 md:px-6 md:py-6">
+                  <div className="mb-4 flex items-center gap-3">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-sky-300/45 bg-sky-300/10 text-base font-bold text-sky-200">02</span>
+                    <span className="text-sm font-bold uppercase tracking-wide text-sky-200">Paso 2</span>
+                  </div>
+                  <p className="text-base leading-7 text-slate-100">Pulsa <strong>«Elegir este modelo»</strong> en la ficha que mejor encaje.</p>
                 </div>
-                <div className="rounded-2xl border border-white/25 bg-white/10 p-4">
-                  <span className="biolab-label block mb-2">Paso 3</span>
-                  <p className="text-base text-slate-100 leading-7">Cuando lo tengas claro, utiliza el botón azul inferior para continuar.</p>
+                <div className="min-w-0 rounded-2xl border border-white/20 bg-white/[0.08] px-5 py-5 md:px-6 md:py-6">
+                  <div className="mb-4 flex items-center gap-3">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-sky-300/45 bg-sky-300/10 text-base font-bold text-sky-200">03</span>
+                    <span className="text-sm font-bold uppercase tracking-wide text-sky-200">Paso 3</span>
+                  </div>
+                  <p className="text-base leading-7 text-slate-100">Cuando lo tengas claro, utiliza el botón azul inferior para continuar.</p>
                 </div>
-              </div>
             </div>
           </div>
         </motion.div>
