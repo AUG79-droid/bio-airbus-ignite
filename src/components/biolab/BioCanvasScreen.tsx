@@ -214,7 +214,7 @@ export default function BioCanvasScreen({ onNext, onBack }: BioCanvasScreenProps
             <p className="text-lg md:text-xl font-semibold mb-3">{current.question}</p>
             <p className="text-base text-muted-foreground leading-7 mb-5">{current.explain}</p>
             <details className="rounded-xl border border-border bg-card p-4 mb-5">
-              <summary className="cursor-pointer text-base font-semibold text-primary">Ver pistas para pensar (no rellenan tu respuesta)</summary>
+              <summary className="cursor-pointer text-base font-semibold text-primary">Ver pistas para pensar</summary>
               <ul className="mt-3 pl-5 list-disc space-y-2 text-base text-foreground leading-7">
                 {current.thinkAbout.map((item) => <li key={item}>{item}</li>)}
               </ul>
