@@ -63,6 +63,7 @@ export default function BioLabNav() {
         <div className="hidden xl:flex items-center gap-1 flex-1 justify-center">
           {SCREEN_LABELS.slice(1).map((label, index) => {
             const screenIndex = index + 1;
+            const stageLabel = screenIndex >= 2 && screenIndex <= 7 ? String(screenIndex - 1) : screenIndex === 1 ? "i" : screenIndex === 8 ? "R" : "F";
             const isActive = currentScreen === screenIndex;
             const isPast = currentScreen > screenIndex;
             const isAvailable = canAccessScreen(screenIndex);
@@ -77,7 +78,7 @@ export default function BioLabNav() {
                 className={`biolab-route-step ${isActive ? "is-active" : ""} ${isPast ? "is-past" : ""}`}
               >
                 <span className="biolab-route-dot">
-                  {isPast ? <Check className="h-3 w-3" strokeWidth={3} /> : !isAvailable ? <LockKeyhole className="h-3 w-3" /> : screenIndex}
+                  {isPast ? <Check className="h-3 w-3" strokeWidth={3} /> : !isAvailable ? <LockKeyhole className="h-3 w-3" /> : stageLabel}
                 </span>
                 <span>{label}</span>
               </button>
@@ -94,9 +95,10 @@ export default function BioLabNav() {
           >
             {SCREEN_LABELS.slice(1).map((label, index) => {
               const screenIndex = index + 1;
+              const stageLabel = screenIndex >= 2 && screenIndex <= 7 ? String(screenIndex - 1) + ". " : "";
               return (
                 <option key={label} value={screenIndex} disabled={!canAccessScreen(screenIndex)}>
-                  {screenIndex}. {label}{!canAccessScreen(screenIndex) ? " — bloqueada" : ""}
+                  {stageLabel}{label}{!canAccessScreen(screenIndex) ? " — bloqueada" : ""}
                 </option>
               );
             })}
