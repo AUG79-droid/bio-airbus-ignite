@@ -29,9 +29,9 @@ export default function VotingScreen({ onNext, onBack }: VotingScreenProps) {
         <div className="biolab-container">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-10">
             <span className="biolab-phase mb-5 inline-flex">Etapa 07 — Revisión de la propuesta</span>
-            <h2 className="biolab-section-title mb-3">Aquí no existe una «respuesta correcta»</h2>
+            <h2 className="biolab-section-title mb-3">Revisa lo que habéis preparado y pasa a la comparación final</h2>
             <p className="biolab-subtitle max-w-3xl mx-auto">
-              Como esta sesión solo tiene <strong>un equipo</strong>, esta pantalla no es una competición. Ofrece una <strong>revisión rápida</strong> antes de cerrar la sesión.
+              Como solo hay <strong>un equipo</strong>, no necesitas votar. Comprueba que ya tenéis un título y un resumen y continúa al resultado final: allí compararás las seis respuestas con una solución de referencia para vuestro reto.
             </p>
           </motion.div>
 
@@ -43,10 +43,10 @@ export default function VotingScreen({ onNext, onBack }: VotingScreenProps) {
                     Qué significa este resultado
                   </span>
                   <h3 className="text-2xl md:text-3xl font-bold font-display text-white mb-4">
-                    No es la idea «correcta». Es la propuesta que ha construido tu equipo.
+                    Esta es vuestra propuesta; después podréis contrastarla con una referencia razonada.
                   </h3>
                   <p className="text-base md:text-lg leading-8 text-slate-200/90 mb-5">
-                    El Laboratorio de Innovación Bioinspirada no busca una única solución. Su objetivo es generar una propuesta <strong>coherente</strong>, <strong>defendible</strong> y con un <strong>próximo paso razonable</strong>.
+                    No existe una única solución técnica válida. En el <strong>resultado final</strong> podréis comparar vuestras respuestas con un ejemplo completo, localizar los puntos débiles y decidir qué mejorar o verificar.
                   </p>
                   <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
                     <span className="biolab-label block mb-2">Comprueba esto antes de terminar</span>
@@ -80,7 +80,7 @@ export default function VotingScreen({ onNext, onBack }: VotingScreenProps) {
           <div className="flex justify-center gap-4">
             <button onClick={onBack} className="biolab-btn-ghost">← Volver a la presentación</button>
             <button onClick={onNext} className="biolab-btn-primary">
-              Ir al paso 8: ver el resumen de la sesión
+              Ver mi resultado y compararlo con la solución de referencia
               <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
             </button>
           </div>
@@ -97,7 +97,7 @@ export default function VotingScreen({ onNext, onBack }: VotingScreenProps) {
             <span className="biolab-phase mb-5 inline-flex">Etapa 07 — Evaluación</span>
             <h2 className="biolab-section-title mb-3">Elige ahora la propuesta más prometedora</h2>
             <p className="biolab-subtitle max-w-3xl">
-              Esto no es un examen. Compara las propuestas y decide cuál parece más <strong>sólida</strong>, <strong>original</strong> y <strong>útil para el contexto Airbus</strong>.
+              Comparad las propuestas y elegid cuál tiene una justificación más convincente. Tras la votación podréis consultar, para cada reto, un <strong>ejemplo completo de referencia</strong> y comparar los seis apartados.
             </p>
           </div>
 
@@ -243,7 +243,7 @@ export default function VotingScreen({ onNext, onBack }: VotingScreenProps) {
         <div className="flex justify-center gap-4">
           <button onClick={onBack} className="biolab-btn-ghost">← Volver a la presentación</button>
           <button onClick={onNext} className="biolab-btn-primary">
-            Ir al paso 8: ver resultados
+            Ver resultados y soluciones de referencia
             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
           </button>
         </div>
