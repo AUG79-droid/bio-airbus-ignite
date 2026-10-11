@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Check, Clipboard, Printer, RotateCcw, ShieldCheck } from "lucide-react";
 import { useBioLab } from "@/contexts/BioLabContext";
 import type { TeamData } from "@/data/biolab-data";
+import ReferenceComparison from "@/components/biolab/ReferenceComparison";
 
 interface ResultsScreenProps {
   onRestart: () => void;
@@ -21,23 +22,23 @@ function proposalTitle(team: TeamData) {
 function readinessChecks(team: TeamData) {
   return [
     {
-      label: "Problema definido",
-      text: "Se formula una necesidad aeronáutica específica.",
+      label: "Problema redactado",
+      text: "Se ha escrito un texto sobre el problema; su calidad no está evaluada.",
       passed: hasText(team.canvas.problem) && Boolean(team.challenge),
     },
     {
-      label: "Mecanismo abstraído",
-      text: "La estrategia biológica y el principio son explícitos.",
+      label: "Principio redactado",
+      text: "Hay una explicación del principio pendiente de valoración técnica.",
       passed: Boolean(team.organism) && hasText(team.canvas.principle),
     },
     {
-      label: "Transferencia especificada",
-      text: "El principio se convierte en una idea concreta para el contexto Airbus.",
+      label: "Solución redactada",
+      text: "Se ha escrito una propuesta; falta comprobar si el mecanismo funciona.",
       passed: hasText(team.canvas.solution),
     },
     {
-      label: "Validación propuesta",
-      text: "Se identifica un primer ensayo o comparación.",
+      label: "Primera prueba redactada",
+      text: "El texto menciona una validación, pero su suficiencia no está comprobada.",
       passed: hasText(team.canvas.implementation),
     },
   ];
@@ -70,7 +71,7 @@ export default function ResultsScreen({ onRestart }: ResultsScreenProps) {
     `Solución propuesta: ${fallback(topTeam.canvas.solution, "No definida")}`,
     `Impacto esperado: ${fallback(topTeam.canvas.benefit, "No definido")}`,
     `Primer paso de validación: ${fallback(topTeam.canvas.implementation, "No definido")}`,
-    `Preparación del diseño: ${readiness}/4 comprobaciones`,
+    `Apartados con información: ${readiness}/4 comprobaciones de presencia de texto (no es evaluación técnica)`,
     `Estado: hipótesis de taller; no constituye una afirmación técnica o ambiental validada.`,
   ].join("\n");
 
@@ -89,12 +90,12 @@ export default function ResultsScreen({ onRestart }: ResultsScreenProps) {
       <div className="biolab-container">
         <motion.header initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="biolab-stage-header mb-10">
           <div>
-            <span className="biolab-phase mb-5 inline-flex">Etapa 08 — Revisión del diseño</span>
-            <h2 className="biolab-section-title mb-3">De una idea de taller a un concepto preparado para generar evidencias</h2>
+            <span className="biolab-phase mb-5 inline-flex">Resultados · comparación final</span>
+            <h2 className="biolab-section-title mb-3">Compara tu propuesta y descubre qué mejorar</h2>
             <p className="biolab-subtitle max-w-3xl">
               {competitive
-                ? "El grupo ha identificado el concepto más prometedor. La revisión inferior muestra sus puntos fuertes y qué debe validarse a continuación."
-                : "Esta es una revisión del diseño, no una pantalla de ganadores. Muestra con qué claridad conecta el concepto la biología, la ingeniería y un próximo paso verificable."}
+                ? "El grupo ha seleccionado propuestas mediante votación. Abajo podéis compararlas con una solución técnica orientativa para cada reto; los votos no demuestran su viabilidad."
+                : "Esta es la revisión final de tu trabajo. Más abajo encontrarás una solución orientativa para el mismo reto, que podrás comparar punto por punto con lo que escribió tu equipo."}
             </p>
           </div>
           <div className="flex flex-wrap gap-3 print:hidden">
@@ -153,8 +154,8 @@ export default function ResultsScreen({ onRestart }: ResultsScreenProps) {
           <div className="biolab-card">
             <div className="flex items-start justify-between gap-5 mb-6">
               <div>
-                <span className="biolab-label block mb-2">Preparación del diseño</span>
-                <h3 className="text-2xl font-display font-bold text-foreground">{readiness}/4 controles de evidencia</h3>
+                <span className="biolab-label block mb-2">Información registrada</span>
+                <h3 className="text-2xl font-display font-bold text-foreground">{readiness}/4 apartados con texto</h3>
               </div>
               <div className="h-14 w-14 rounded-2xl grid place-items-center bg-primary/8 text-primary"><ShieldCheck className="h-7 w-7" /></div>
             </div>
@@ -169,7 +170,7 @@ export default function ResultsScreen({ onRestart }: ResultsScreenProps) {
           </div>
 
           <div className="biolab-card">
-            <span className="biolab-label block mb-4">Transferencia técnica</span>
+            <span className="biolab-label block mb-4">Lo que escribió el equipo</span>
             <div className="space-y-4">
               {[
                 ["Solución propuesta", fallback(topTeam.canvas.solution, "Concreta más la aplicación propuesta.")],
@@ -204,9 +205,11 @@ export default function ResultsScreen({ onRestart }: ResultsScreenProps) {
           </section>
         )}
 
+        <ReferenceComparison teams={sorted} />
+
         <section className="max-w-6xl mx-auto biolab-callout mb-8">
           <strong>Interpretación responsable</strong>
-          <p>Este resultado es una hipótesis temprana de diseño. Un concepto inspirado en la naturaleza no debe presentarse como técnicamente viable ni ambientalmente beneficioso hasta haber evaluado los ensayos, las implicaciones de ciclo de vida y los posibles efectos no deseados.</p>
+          <p>La comparación anterior es orientativa y sirve para detectar fortalezas y carencias. No equivale a una corrección automática de contenido, una aprobación de Airbus ni una demostración de viabilidad o beneficio ambiental. Para validar cualquier propuesta serían necesarios ensayos, revisión de riesgos y evaluación del ciclo de vida.</p>
         </section>
 
         <div className="text-center print:hidden">
