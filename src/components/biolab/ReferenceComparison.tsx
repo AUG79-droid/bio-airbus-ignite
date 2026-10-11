@@ -6,6 +6,7 @@ type Props = { teams: TeamData[] };
 
 export default function ReferenceComparison({ teams }: Props) {
   const [assessments, setAssessments] = useState<Record<string, boolean[]>>({});
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
 
   const toggle = (teamId: string, criterion: number) => {
     setAssessments((current) => {
@@ -39,8 +40,14 @@ export default function ReferenceComparison({ teams }: Props) {
           const ticks = assessments[team.id] ?? [false, false, false, false];
           const count = ticks.filter(Boolean).length;
           return (
-            <details key={team.id}  className="rounded-2xl border border-border bg-background/70 p-4 md:p-6" defaultOpen={index === 0}>
-              <summary className="cursor-pointer text-lg font-bold text-primary leading-7">
+            <details key={team.id} className="rounded-2xl border border-border bg-background/70 p-4 md:p-6" open={expanded[team.id] ?? (index === 0)}>
+              <summary
+                className="cursor-pointer text-lg font-bold text-primary leading-7"
+                onClick={(event) => {
+                  event.preventDefault();
+                  setExpanded((previous) => ({ ...previous, [team.id]: !(previous[team.id] ?? (index === 0)) }));
+                }}
+              >
                 Equipo {team.name} · {team.challenge?.title ?? "Reto sin definir"} — ver comparación
               </summary>
               {!reference ? (
