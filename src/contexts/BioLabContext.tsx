@@ -61,7 +61,7 @@ function canvasIsComplete(team?: TeamData) {
 }
 
 function pitchIsComplete(team?: TeamData) {
-  return Boolean(team?.pitchTitle.trim() && team?.pitchSummary.trim());
+  return Boolean(team && team.pitchTitle.trim().length >= 10 && team.pitchSummary.trim().length >= 120);
 }
 
 function getMaxAccessibleScreen(team?: TeamData, allTeams: TeamData[] = [], reviewCompleted = false) {
