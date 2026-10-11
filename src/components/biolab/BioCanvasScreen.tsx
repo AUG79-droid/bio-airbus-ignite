@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useBioLab } from "@/contexts/BioLabContext";
 import { CanvasData, isCanvasEntryReady, isLegacyCanvasExample, MIN_CANVAS_CHARS } from "@/data/biolab-data";
@@ -94,8 +94,9 @@ const GUIDES: FieldGuide[] = [
 ];
 
 export default function BioCanvasScreen({ onNext, onBack }: BioCanvasScreenProps) {
-  const { activeTeam, updateCanvas, setScreen } = useBioLab();
+  const { activeTeam, updateCanvas, setScreen, setGuideSubstep } = useBioLab();
   const [activeIndex, setActiveIndex] = useState(0);
+  useEffect(() => setGuideSubstep(activeIndex), [activeIndex, setGuideSubstep]);
   if (!activeTeam) return null;
 
   const challenge = activeTeam.challenge;
