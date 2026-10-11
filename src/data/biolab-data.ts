@@ -199,6 +199,32 @@ export const STEPS = [
   { number: 6, title: "Presentar y evaluar", description: "Expón la idea y evalúa las propuestas más sólidas" },
 ];
 
+/** Text is a learner response, not a previously generated, ready-made answer.
+ * The character check is only an input-completeness check, NOT a technical assessment. */
+export const MIN_CANVAS_CHARS = 30;
+
+const LEGACY_EXAMPLE_MARKERS: Record<keyof CanvasData, string> = {
+  problem: "El equipo quiere abordar ",
+  organism: "Es una referencia útil porque realiza con eficiencia una función comparable al reto Airbus.",
+  principle: "No copiamos la forma del organismo: transferimos la lógica funcional",
+  solution: "La idea consiste en diseñar una propuesta técnica inspirada en ",
+  benefit: "El impacto esperado es mejorar el rendimiento en ",
+  implementation: "Un próximo paso razonable sería realizar una validación inicial:",
+};
+
+export function isLegacyCanvasExample(key: keyof CanvasData, text: string): boolean {
+  const content = text.trim();
+  if (!content) return false;
+  const marker = LEGACY_EXAMPLE_MARKERS[key];
+  return key === "problem" || key === "implementation"
+    ? content.startsWith(marker)
+    : content.includes(marker);
+}
+
+export function isCanvasEntryReady(key: keyof CanvasData, text: string): boolean {
+  return text.trim().length >= MIN_CANVAS_CHARS && !isLegacyCanvasExample(key, text);
+}
+
 export function createEmptyCanvas(): CanvasData {
   return {
     problem: "",
