@@ -260,10 +260,10 @@ export default function BioCanvasScreen({ onNext, onBack }: BioCanvasScreenProps
         <section className="max-w-6xl mx-auto rounded-2xl border border-border bg-white px-5 py-5 mb-7">
           <h2 className="text-lg font-bold mb-3">Antes de presentarla, comprueba tu propuesta</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-base leading-7">
-            <p>✓ Has definido un problema técnico concreto.</p>
-            <p>✓ Has explicado <strong>cómo</strong> el mecanismo natural podría ayudar.</p>
-            <p>✓ La solución contempla restricciones de seguridad y operación.</p>
-            <p>✓ Propones una prueba que pueda confirmar o descartar la hipótesis.</p>
+            <p>□ ¿Has definido un problema técnico concreto?</p>
+            <p>□ ¿Has explicado <strong>cómo</strong> el mecanismo natural podría ayudar?</p>
+            <p>□ ¿Has considerado las restricciones de seguridad y operación?</p>
+            <p>□ ¿Has propuesto una prueba que pueda confirmar o descartar la hipótesis?</p>
           </div>
           <p className="text-sm md:text-base text-muted-foreground mt-3">
             Estas son preguntas de revisión personal, no verificaciones automáticas.
