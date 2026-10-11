@@ -46,12 +46,12 @@ export default function BioLabNav() {
       aria-label="Ruta de aprendizaje"
     >
       <div className="biolab-container min-h-20 flex items-center gap-3">
-        <button onClick={() => setScreen(1)} className="group flex shrink-0 max-w-[240px] min-w-0 items-center gap-3 text-left">
+        <button onClick={() => setScreen(1)} className="group flex shrink-0 max-w-[270px] min-w-0 items-center gap-3 text-left">
           <div className="h-9 w-9 shrink-0 rounded-xl bg-primary text-primary-foreground grid place-items-center font-display text-xs font-black shadow-sm">
             BI
           </div>
           <div className="hidden sm:block min-w-0">
-            <span className="block text-sm font-bold font-display text-foreground leading-snug group-hover:text-primary transition-colors">
+            <span className="block text-base font-bold font-display text-foreground leading-snug group-hover:text-primary transition-colors">
               Laboratorio de Innovación Bioinspirada
             </span>
             <span className="block text-xs uppercase tracking-wide leading-snug text-slate-600">
@@ -60,7 +60,7 @@ export default function BioLabNav() {
           </div>
         </button>
 
-        <div className="hidden min-[1650px]:flex items-center gap-1 flex-1 justify-center">
+        <div className="hidden min-[1780px]:flex items-center gap-1 flex-1 justify-center">
           {SCREEN_LABELS.slice(1).map((label, index) => {
             const screenIndex = index + 1;
             const stageLabel = screenIndex >= 2 && screenIndex <= 7 ? String(screenIndex - 1) : screenIndex === 1 ? "i" : screenIndex === 8 ? "R" : "F";
@@ -86,7 +86,7 @@ export default function BioLabNav() {
           })}
         </div>
 
-        <div className="relative min-[1650px]:hidden flex-1 max-w-[290px]">
+        <div className="relative min-[1780px]:hidden flex-1 max-w-[290px]">
           <select
             value={currentScreen}
             onChange={(event) => setScreen(Number(event.target.value))}
