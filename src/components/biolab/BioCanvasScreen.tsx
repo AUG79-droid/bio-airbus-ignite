@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { useBioLab } from "@/contexts/BioLabContext";
 import { CanvasData, isCanvasEntryReady, isLegacyCanvasExample, MIN_CANVAS_CHARS } from "@/data/biolab-data";
@@ -95,18 +95,13 @@ const GUIDES: FieldGuide[] = [
 
 export default function BioCanvasScreen({ onNext, onBack }: BioCanvasScreenProps) {
   const { activeTeam, updateCanvas, setScreen, setGuideSubstep } = useBioLab();
-  const [activeIndex, setActiveIndex] = useState(0);
-  useEffect(() => setGuideSubstep(activeIndex), [activeIndex, setGuideSubstep]);
+  useEffect(() => setGuideSubstep(0), [setGuideSubstep]);
   if (!activeTeam) return null;
 
   const challenge = activeTeam.challenge;
   const organism = activeTeam.organism;
-  const current = GUIDES[activeIndex];
-  const answer = activeTeam.canvas[current.key];
   const count = GUIDES.filter((guide) => isCanvasEntryReady(guide.key, activeTeam.canvas[guide.key])).length;
   const canContinue = count === GUIDES.length;
-  const isLegacy = isLegacyCanvasExample(current.key, answer);
-  const isReady = isCanvasEntryReady(current.key, answer);
   const suspectPair = challenge?.id === "c7" && organism?.id === "o4";
 
   return (
@@ -121,8 +116,8 @@ export default function BioCanvasScreen({ onNext, onBack }: BioCanvasScreenProps
           <h1 className="biolab-section-title mb-3">Ahora te toca crear la propuesta</h1>
           <p className="biolab-subtitle max-w-4xl">
             Tu misión es explicar <strong>cómo una estrategia de la naturaleza podría resolver
-            un problema real del contexto Airbus</strong>. Completarás seis apartados, uno a uno,
-            con tus propias respuestas. No hay una solución automática ni una respuesta correcta predefinida.
+            un problema real del contexto Airbus</strong>. Completa las seis respuestas claramente identificadas
+            que aparecen a continuación. No hay una solución automática ni una respuesta correcta predefinida.
           </p>
         </motion.header>
 
@@ -184,77 +179,71 @@ export default function BioCanvasScreen({ onNext, onBack }: BioCanvasScreenProps
         <section className="max-w-6xl mx-auto biolab-card mb-6" aria-label="Editor del lienzo">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-5">
             <div>
-              <h2 className="text-xl font-display font-bold">Tu propuesta, apartado {activeIndex + 1} de 6</h2>
+              <h2 className="text-xl md:text-2xl font-display font-bold">Tu propuesta · 6 respuestas</h2>
               <p className="text-sm md:text-base text-muted-foreground">
-                {count} de 6 apartados con texto propio suficiente. Puedes volver y editar cualquiera.
+                Responde todas las preguntas. Los seis apartados permanecen visibles para que puedas revisar la propuesta completa.
               </p>
             </div>
-            <div aria-live="polite" className="text-base font-semibold text-primary">{count}/6 redactados</div>
+            <div aria-live="polite" className="shrink-0 rounded-full bg-primary/10 px-4 py-2 text-base font-bold text-primary">
+              {count}/6 redactadas
+            </div>
           </div>
-          <nav className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 mb-7" aria-label="Apartados del lienzo">
+          <div className="space-y-5">
             {GUIDES.map((guide, index) => {
-              const ready = isCanvasEntryReady(guide.key, activeTeam.canvas[guide.key]);
+              const answer = activeTeam.canvas[guide.key];
+              const isLegacy = isLegacyCanvasExample(guide.key, answer);
+              const isReady = isCanvasEntryReady(guide.key, answer);
               return (
-                <button
+                <article
                   key={guide.key}
-                  type="button"
-                  onClick={() => setActiveIndex(index)}
-                  aria-current={index === activeIndex ? "step" : undefined}
-                  className={`rounded-xl border p-3 text-left text-sm md:text-base font-semibold transition-colors ${index === activeIndex ? "bg-primary text-primary-foreground border-primary" : "bg-background border-border hover:border-primary/40 text-foreground"}`}
+                  className={`rounded-2xl border-2 p-5 md:p-7 transition-colors ${isReady ? "border-emerald-300 bg-emerald-50/40" : "border-primary/20 bg-primary/5"}`}
                 >
-                  <span className="block text-xs mb-1">{String(index + 1).padStart(2, "0")} · {ready ? "✓ Redactado" : "Pendiente"}</span>
-                  {guide.short}
-                </button>
+                  <div className="flex flex-wrap items-start justify-between gap-3 mb-3">
+                    <div>
+                      <span className="biolab-label block mb-2">Respuesta {String(index + 1).padStart(2, "0")} de 06 · {guide.short}</span>
+                      <h3 className="text-xl md:text-2xl font-bold font-display">{guide.title}</h3>
+                    </div>
+                    <span className={`rounded-full px-3 py-1 text-sm font-bold ${isReady ? "bg-emerald-100 text-emerald-800" : "bg-white text-muted-foreground border border-border"}`}>
+                      {isReady ? "✓ Redactada" : "Pendiente"}
+                    </span>
+                  </div>
+                  <label htmlFor={`canvas-${guide.key}`} className="block text-lg md:text-xl font-semibold mb-3">
+                    {guide.question}
+                  </label>
+                  <p className="text-base text-muted-foreground leading-7 mb-4">{guide.explain}</p>
+                  <details className="rounded-xl border border-border bg-white p-4 mb-4">
+                    <summary className="cursor-pointer text-base font-semibold text-primary">¿Necesitas ayuda? Ver pistas para pensar</summary>
+                    <ul className="mt-3 pl-5 list-disc space-y-2 text-base text-foreground leading-7">
+                      {guide.thinkAbout.map((item) => <li key={item}>{item}</li>)}
+                    </ul>
+                  </details>
+                  <textarea
+                    id={`canvas-${guide.key}`}
+                    value={answer}
+                    aria-label={`${index + 1} de 6: ${guide.question}`}
+                    onFocus={() => setGuideSubstep(index)}
+                    onChange={(event) => updateCanvas(guide.key, event.target.value)}
+                    placeholder={guide.placeholder}
+                    rows={5}
+                    className="biolab-input resize-y text-base md:text-lg leading-relaxed min-h-[140px] bg-white"
+                  />
+                  {isLegacy && (
+                    <p className="mt-3 rounded-lg border border-amber-400 bg-amber-100 px-4 py-3 text-base text-amber-950" role="status">
+                      Este campo contiene un texto introducido mediante un ejemplo automático de la versión anterior.
+                      Se ha conservado, pero <strong>debes reformularlo con tu propia explicación</strong> para marcarlo como redactado.
+                    </p>
+                  )}
+                  <div className="flex flex-wrap justify-between gap-3 mt-3 text-sm md:text-base">
+                    <span className="text-muted-foreground" aria-live="polite">
+                      {isReady ? "✓ Respuesta redactada. Revisa su calidad técnica." : isLegacy
+                        ? "Pendiente de reformulación"
+                        : `Escribe al menos ${MIN_CANVAS_CHARS} caracteres para registrar esta respuesta.`}
+                    </span>
+                    <span className="text-muted-foreground">{answer.trim().length} caracteres</span>
+                  </div>
+                </article>
               );
             })}
-          </nav>
-
-          <div className="rounded-2xl border border-primary/20 bg-primary/5 p-5 md:p-7">
-            <span className="biolab-label block mb-2">Apartado {String(activeIndex + 1).padStart(2, "0")}</span>
-            <h3 className="text-2xl font-bold font-display mb-3">{current.title}</h3>
-            <p className="text-lg md:text-xl font-semibold mb-3">{current.question}</p>
-            <p className="text-base text-muted-foreground leading-7 mb-5">{current.explain}</p>
-            <details className="rounded-xl border border-border bg-card p-4 mb-5">
-              <summary className="cursor-pointer text-base font-semibold text-primary">Ver pistas para pensar</summary>
-              <ul className="mt-3 pl-5 list-disc space-y-2 text-base text-foreground leading-7">
-                {current.thinkAbout.map((item) => <li key={item}>{item}</li>)}
-              </ul>
-            </details>
-
-            <label htmlFor={`canvas-${current.key}`} className="block font-semibold text-base mb-2">
-              Tu respuesta (escríbela aquí):
-            </label>
-            <textarea
-              id={`canvas-${current.key}`}
-              value={answer}
-              onChange={(event) => updateCanvas(current.key, event.target.value)}
-              placeholder={current.placeholder}
-              rows={7}
-              className="biolab-input resize-y text-base md:text-lg leading-relaxed min-h-[180px] bg-white"
-            />
-            {isLegacy && (
-              <p className="mt-3 rounded-lg border border-amber-400 bg-amber-100 px-4 py-3 text-base text-amber-950" role="status">
-                Este campo contiene un texto introducido mediante un ejemplo automático de la versión anterior.
-                Se ha conservado, pero <strong>debes reformularlo con tu propia explicación</strong> para marcarlo como redactado.
-              </p>
-            )}
-            <div className="flex flex-wrap justify-between gap-3 mt-3 text-sm md:text-base">
-              <span className="text-muted-foreground" aria-live="polite">
-                {isReady ? "✓ Apartado redactado. Revisa la calidad técnica antes de continuar." : isLegacy
-                  ? "Pendiente de reformulación"
-                  : `Escribe al menos ${MIN_CANVAS_CHARS} caracteres para registrar este apartado.`}
-              </span>
-              <span className="text-muted-foreground">{answer.trim().length} caracteres</span>
-            </div>
-          </div>
-
-          <div className="mt-6 flex items-center justify-between gap-3 flex-wrap">
-            <button type="button" className="biolab-btn-ghost" disabled={activeIndex === 0} onClick={() => setActiveIndex((n) => Math.max(0, n - 1))}>
-              ← Apartado anterior
-            </button>
-            <button type="button" className="biolab-btn-primary" disabled={activeIndex === GUIDES.length - 1} onClick={() => setActiveIndex((n) => Math.min(GUIDES.length - 1, n + 1))}>
-              Siguiente apartado →
-            </button>
           </div>
         </section>
 

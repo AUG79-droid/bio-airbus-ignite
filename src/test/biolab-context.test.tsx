@@ -8,7 +8,7 @@ function Harness() {
   const lab = useBioLab();
   const completeCanvas = () => {
     (["problem", "organism", "principle", "solution", "benefit", "implementation"] as const)
-      .forEach((field) => lab.updateCanvas(field, `Completed ${field}`));
+      .forEach((field) => lab.updateCanvas(field, `Respuesta original completa para ${field} con suficiente detalle técnico.`));
   };
 
   return (
@@ -20,7 +20,10 @@ function Harness() {
       <button onClick={() => lab.setTeamChallenge(CHALLENGES[0])}>set challenge</button>
       <button onClick={() => lab.setTeamOrganism(ORGANISMS[0])}>set organism</button>
       <button onClick={completeCanvas}>complete canvas</button>
-      <button onClick={() => lab.updatePitch("Bionic structure", "A testable bio-inspired proposal.")}>complete pitch</button>
+      <button onClick={() => lab.updatePitch(
+        "Estructura biónica",
+        "Propuesta bioinspirada verificable con un mecanismo definido, una referencia, comparación técnica, restricciones de seguridad y un criterio de éxito medible.",
+      )}>complete pitch</button>
       <button onClick={() => lab.setScreen(8)}>open review</button>
       <button onClick={lab.nextScreen}>finish review</button>
     </div>
@@ -52,7 +55,7 @@ describe("BioLab learning route", () => {
     expect(screen.getByTestId("results-access")).toHaveTextContent("true");
 
     await waitFor(() => {
-      expect(window.localStorage.getItem("bio-airbus-ignite-es-v2")).toContain("Bionic structure");
+      expect(window.localStorage.getItem("bio-airbus-ignite-es-v2")).toContain("Estructura biónica");
     });
   });
 });
