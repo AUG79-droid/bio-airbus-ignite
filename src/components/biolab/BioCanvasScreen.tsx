@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { useBioLab } from "@/contexts/BioLabContext";
-import { CanvasData, isCanvasEntryReady, isLegacyCanvasExample, MIN_CANVAS_CHARS } from "@/data/biolab-data";
+import { CanvasData, isCanvasEntryReady, isLegacyCanvasExample, isObviousFillerText, MIN_CANVAS_CHARS } from "@/data/biolab-data";
 
 interface BioCanvasScreenProps {
   onNext: () => void;
@@ -192,11 +192,12 @@ export default function BioCanvasScreen({ onNext, onBack }: BioCanvasScreenProps
             {GUIDES.map((guide, index) => {
               const answer = activeTeam.canvas[guide.key];
               const isLegacy = isLegacyCanvasExample(guide.key, answer);
+              const isFiller = isObviousFillerText(answer);
               const isReady = isCanvasEntryReady(guide.key, answer);
               return (
                 <article
                   key={guide.key}
-                  className={`rounded-2xl border-2 p-5 md:p-7 transition-colors ${isReady ? "border-emerald-300 bg-emerald-50/40" : "border-primary/20 bg-primary/5"}`}
+                  className={`rounded-2xl border-2 p-5 md:p-7 transition-colors ${isReady ? "border-emerald-300 bg-emerald-50/40" : isFiller ? "border-amber-400 bg-amber-50" : "border-primary/20 bg-primary/5"}`}
                 >
                   <div className="flex flex-wrap items-start justify-between gap-3 mb-3">
                     <div>
@@ -220,6 +221,7 @@ export default function BioCanvasScreen({ onNext, onBack }: BioCanvasScreenProps
                   <textarea
                     id={`canvas-${guide.key}`}
                     value={answer}
+                    aria-invalid={isFiller}
                     aria-label={`${index + 1} de 6: ${guide.question}`}
                     onFocus={() => setGuideSubstep(index)}
                     onChange={(event) => updateCanvas(guide.key, event.target.value)}
@@ -237,6 +239,7 @@ export default function BioCanvasScreen({ onNext, onBack }: BioCanvasScreenProps
                     <span className="text-muted-foreground" aria-live="polite">
                       {isReady ? "✓ Respuesta redactada. Revisa su calidad técnica." : isLegacy
                         ? "Pendiente de reformulación"
+                        : isFiller ? "El texto repetido o de prueba no cuenta como respuesta. Escribe una explicación propia."
                         : `Escribe al menos ${MIN_CANVAS_CHARS} caracteres para registrar esta respuesta.`}
                     </span>
                     <span className="text-muted-foreground">{answer.trim().length} caracteres</span>
