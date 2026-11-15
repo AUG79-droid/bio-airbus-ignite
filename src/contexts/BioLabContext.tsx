@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useMemo, useState, ReactNode } from "react";
-import { TeamData, Challenge, Organism, createTeam, CanvasData, isCanvasEntryReady } from "@/data/biolab-data";
+import { TeamData, Challenge, Organism, createTeam, CanvasData, isCanvasEntryReady, isPitchTitleReady, isPitchSummaryReady } from "@/data/biolab-data";
 import { createDemoTeam } from "@/data/demo-session";
 
 const STORAGE_KEY = "bio-airbus-ignite-es-v2";
@@ -71,7 +71,7 @@ function canvasIsComplete(team?: TeamData) {
 }
 
 function pitchIsComplete(team?: TeamData) {
-  return Boolean(team && team.pitchTitle.trim().length >= 10 && team.pitchSummary.trim().length >= 120);
+  return Boolean(team && isPitchTitleReady(team.pitchTitle) && isPitchSummaryReady(team.pitchSummary));
 }
 
 function getMaxAccessibleScreen(team?: TeamData, allTeams: TeamData[] = [], reviewCompleted = false) {
