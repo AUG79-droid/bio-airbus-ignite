@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useBioLab } from "@/contexts/BioLabContext";
+import { isCanvasEntryReady, isObviousFillerText, isPitchTitleReady, isPitchSummaryReady } from "@/data/biolab-data";
 
 interface PitchScreenProps {
   onNext: () => void;
@@ -18,13 +19,16 @@ export default function PitchScreen({ onNext, onBack }: PitchScreenProps) {
     { label: "Reto Airbus", value: challenge?.title },
     { label: "Modelo natural", value: organism?.name },
     { label: "Principio", value: organism?.principle },
-    { label: "Solución propuesta", value: canvas.solution },
-    { label: "Impacto esperado", value: canvas.benefit },
+    { label: "Solución propuesta", value: isCanvasEntryReady("solution", canvas.solution) ? canvas.solution : undefined },
+    { label: "Impacto esperado", value: isCanvasEntryReady("benefit", canvas.benefit) ? canvas.benefit : undefined },
   ];
 
   const completedItems = canvasPreview.filter((item) => item.value && item.value.trim().length > 0).length;
-  const titleReady = activeTeam.pitchTitle.trim().length >= 10;
-  const summaryReady = activeTeam.pitchSummary.trim().length >= 120;
+  const hasInvalidPreview = (["solution", "benefit"] as const).some(
+    (field) => canvas[field].trim().length > 0 && !isCanvasEntryReady(field, canvas[field]),
+  );
+  const titleReady = isPitchTitleReady(activeTeam.pitchTitle);
+  const summaryReady = isPitchSummaryReady(activeTeam.pitchSummary);
   const pitchIsReady = titleReady && summaryReady;
   const nextIncompleteTeamIndex = teams.findIndex((team, index) => index !== activeTeamIndex && !isPitchComplete(team));
   const hasAnotherTeamToComplete = nextIncompleteTeamIndex >= 0;
@@ -136,10 +140,15 @@ export default function PitchScreen({ onNext, onBack }: PitchScreenProps) {
             <div className="biolab-card">
               <h3 className="biolab-label mb-4">Resumen preparado para presentar</h3>
               <div className="space-y-4">
+                {hasInvalidPreview && (
+                  <p role="status" className="rounded-xl border border-amber-400 bg-amber-50 px-3 py-2 text-sm text-amber-950 break-words">
+                    Hay respuestas de prueba o incompletas. Corrígelas en el Lienzo antes de presentar la propuesta.
+                  </p>
+                )}
                 {canvasPreview.map((item) => (
                   <div key={item.label}>
                     <span className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground/70">{item.label}</span>
-                    <p className="text-sm text-foreground mt-1 leading-relaxed">{item.value || "Todavía no completado"}</p>
+                    <p className="text-sm text-foreground mt-1 leading-relaxed break-words" style={{ overflowWrap: "anywhere" }}>{item.value || "Pendiente de completar o corregir en el Lienzo"}</p>
                   </div>
                 ))}
               </div>
@@ -223,8 +232,8 @@ export default function PitchScreen({ onNext, onBack }: PitchScreenProps) {
 
         <section className="max-w-6xl mx-auto mb-5 rounded-2xl border border-primary/20 bg-white p-5" aria-label="Requisitos para avanzar">
           <h3 className="text-lg font-bold mb-2">¿Qué falta para pasar al paso 7?</h3>
-          <p className="text-base leading-7">{titleReady ? "✓" : "○"} Título de la propuesta: {titleReady ? "listo" : "escribe al menos 10 caracteres"}.</p>
-          <p className="text-base leading-7">{summaryReady ? "✓" : "○"} Presentación de 60 segundos: {summaryReady ? "lista para revisar" : `faltan ${Math.max(0,120-activeTeam.pitchSummary.trim().length)} caracteres para alcanzar el mínimo`}.</p>
+          <p className="text-base leading-7">{titleReady ? "✓" : "○"} Título de la propuesta: {titleReady ? "listo" : isObviousFillerText(activeTeam.pitchTitle) ? "sustituye el texto de prueba" : "escribe al menos 10 caracteres"}.</p>
+          <p className="text-base leading-7">{summaryReady ? "✓" : "○"} Presentación de 60 segundos: {summaryReady ? "lista para revisar" : isObviousFillerText(activeTeam.pitchSummary) ? "sustituye el texto de prueba" : `faltan ${Math.max(0,120-activeTeam.pitchSummary.trim().length)} caracteres para alcanzar el mínimo`}.</p>
           <p className="text-sm text-muted-foreground mt-2">El mínimo de caracteres no comprueba la calidad: revisa que el contenido sea coherente.</p>
         </section>
         <div className="flex justify-center gap-4 flex-wrap">
