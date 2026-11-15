@@ -6,6 +6,14 @@ import { componentTagger } from "lovable-tagger";
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   base: "/bio-airbus-ignite/",
+  build: {
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, "index.html"),
+        demo: path.resolve(__dirname, "demo.html"),
+      },
+    },
+  },
   server: {
     host: "::",
     port: 8080,

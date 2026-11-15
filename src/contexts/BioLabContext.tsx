@@ -1,7 +1,11 @@
 import React, { createContext, useContext, useEffect, useMemo, useState, ReactNode } from "react";
 import { TeamData, Challenge, Organism, createTeam, CanvasData, isCanvasEntryReady } from "@/data/biolab-data";
+import { createDemoTeam } from "@/data/demo-session";
 
 const STORAGE_KEY = "bio-airbus-ignite-es-v2";
+
+/** La página demo es independiente de la sesión original y se reinicia ya completada. */
+export const IS_DEMO_MODE = typeof window !== "undefined" && window.location.pathname.endsWith("/demo.html");
 
 interface StoredSession {
   currentScreen: number;
@@ -36,6 +40,10 @@ interface BioLabState extends StoredSession {
 const BioLabContext = createContext<BioLabState | undefined>(undefined);
 
 function loadStoredSession(): StoredSession {
+  if (IS_DEMO_MODE) {
+    return { currentScreen: 0, teams: [createDemoTeam()], activeTeamIndex: 0, reviewCompleted: true };
+  }
+
   const fallback = { currentScreen: 0, teams: [], activeTeamIndex: 0, reviewCompleted: false };
 
   try {
@@ -99,6 +107,7 @@ export function BioLabProvider({ children }: { children: ReactNode }) {
   );
 
   useEffect(() => {
+    if (IS_DEMO_MODE) return;
     window.localStorage.setItem(
       STORAGE_KEY,
       JSON.stringify({ currentScreen, teams, activeTeamIndex, reviewCompleted }),
@@ -181,6 +190,14 @@ export function BioLabProvider({ children }: { children: ReactNode }) {
   };
 
   const resetSession = () => {
+    if (IS_DEMO_MODE) {
+      setCurrentScreen(0);
+      setTeams([createDemoTeam()]);
+      setActiveTeamIndex(0);
+      setReviewCompleted(true);
+      setGuideSubstep(0);
+      return;
+    }
     window.localStorage.removeItem(STORAGE_KEY);
     setCurrentScreen(0);
     setTeams([]);
