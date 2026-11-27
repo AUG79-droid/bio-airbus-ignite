@@ -82,7 +82,7 @@ const screenSteps: Guidance[] = [
   },
   {
     title: "Resultado · Comparación",
-    instruction: "Has llegado al final. Abre la comparación de tu equipo para ver tus seis respuestas junto a una solución técnica orientativa para el mismo reto. Identifica diferencias y revisa los cuatro criterios de aprendizaje.",
+    instruction: "Has llegado al final. Abre la comparación de tu equipo para ver tus seis respuestas junto a una solución técnica orientativa para el mismo reto. Identifica diferencias y revisa los criterios de aprendizaje.",
     tip: "La referencia no es la única respuesta válida ni una tecnología aprobada. Detecta qué te falta justificar y qué experimento permitiría comprobar tu idea.",
   },
 ];
