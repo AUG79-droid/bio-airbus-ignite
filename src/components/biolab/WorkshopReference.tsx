@@ -23,7 +23,7 @@ export default function WorkshopReference({session,proposals}:{session:Session;p
   </section>
   <section className="rounded-xl border p-4 md:p-5">
     <h3 className="font-bold text-xl mb-2">Compara cada equipo con la referencia</h3>
-    <p className="text-sm leading-6 mb-4">Selecciona un equipo. A la izquierda verás sus respuestas originales; a la derecha, las seis respuestas modelo del reto. Revisad las diferencias y qué se podría mejorar, sin decidir quién gana.</p>
+    <p className="text-sm leading-6 mb-4">Selecciona un equipo. A la izquierda verás sus respuestas originales; a la derecha, las seis respuestas modelo del reto. Revisad las diferencias y qué se podría mejorar.</p>
     <div className="flex flex-wrap gap-2 mb-5" role="group" aria-label="Equipo para comparar">{proposals.map(p=><button type="button" key={p.slot} data-testid={"compare-team-"+p.slot} aria-pressed={selected.slot===p.slot} className={selected.slot===p.slot?"biolab-btn-primary":"biolab-btn-ghost border border-border"} onClick={()=>setSlot(p.slot)}>Equipo {p.slot}</button>)}</div>
     <div className="rounded-xl border bg-muted/40 p-4 mb-4 min-w-0"><h4 className="font-bold text-base break-words" style={{overflowWrap:"anywhere"}} data-testid="selected-proposal">{selected.pitchTitle}</h4><p className="text-sm leading-6 whitespace-pre-wrap break-words mt-2" style={{overflowWrap:"anywhere"}}>{selected.pitchSummary}</p><p className="text-sm mt-3"><strong>Modelo elegido:</strong> {chosen?.name} · {selected.language.toUpperCase()}</p></div>
     <p className="text-sm leading-6 mb-4">Un modelo distinto puede ser válido si explica el mecanismo causal y cómo comprobar la solución. La coincidencia con el nombre del modelo no garantiza una buena respuesta.</p>

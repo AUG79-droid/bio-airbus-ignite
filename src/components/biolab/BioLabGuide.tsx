@@ -97,7 +97,7 @@ export default function BioLabGuide({stageOverride,competition=false}:{stageOver
 
   const guide = useMemo(() => {
     if(competition&&currentScreen===1)return {title:"Guía · Cómo jugar en competición",instruction:"Lee las cuatro reglas de biomímesis y el ejemplo trabajado antes de comenzar. El reto ya está fijado para todos los equipos.",tip:"Elige por la función y el mecanismo, no por la forma. No necesitas esperar a otros equipos."};
-    if(competition&&currentScreen===3)return {title:"Reto común · evaluación inicial",instruction:"Todos los equipos tienen exactamente el mismo reto. Completa la evaluación inicial y explora la biblioteca natural.",tip:"No puedes volver a girar la ruleta. Tu propuesta debe resolver el reto común."};
+    if(competition&&currentScreen===3)return {title:"Reto común · empieza la investigación",instruction:"Todos los equipos tienen exactamente el mismo reto. Explora la biblioteca natural y busca un mecanismo adecuado.",tip:"No puedes volver a girar la ruleta. Tu propuesta debe resolver el reto común."};
     if(competition&&currentScreen===8)return {title:"Entrega de la propuesta",instruction:"Cierra y descarga tu propuesta JSON. Compártela con la persona que organiza el taller cuando esté lista.",tip:"Espera a que se recojan todas las propuestas antes de revisar las respuestas de referencia."};
     if (currentScreen === 6) return canvasSteps[Math.min(Math.max(guideSubstep, 0), 5)];
     const base = screenSteps[Math.min(Math.max(currentScreen, 0), screenSteps.length - 1)];
