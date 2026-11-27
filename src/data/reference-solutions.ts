@@ -1,3 +1,4 @@
+import { climateReferenceSolutions } from "./climate-challenges";
 import type { CanvasData } from "./biolab-data";
 
 /**
@@ -15,6 +16,7 @@ export type ReferenceSolution = {
 };
 
 export const referenceSolutions: Record<string, ReferenceSolution> = {
+  ...climateReferenceSolutions,
   c1: {
     recommendedModel: "Huesos de aves",
     mechanism: "Distribución del material mediante geometrías internas aligeradas y refuerzos según la trayectoria de cargas.",

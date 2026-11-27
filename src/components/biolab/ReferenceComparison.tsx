@@ -1,3 +1,4 @@
+import { climateSources } from "@/data/climate-challenges";
 import { useState } from "react";
 import type { TeamData } from "@/data/biolab-data";
 import { referenceLabels, referenceSolutions } from "@/data/reference-solutions";
@@ -38,7 +39,8 @@ export default function ReferenceComparison({ teams }: Props) {
         {teams.map((team, index) => {
           const reference = team.challenge ? referenceSolutions[team.challenge.id] : undefined;
           const ticks = assessments[team.id] ?? [false, false, false, false];
-          const count = ticks.filter(Boolean).length;
+          const total = ref?.check.length ?? 4;
+          const count = ticks.slice(0, total).filter(Boolean).length;
           return (
             <details key={team.id} className="rounded-2xl border border-border bg-background/70 p-4 md:p-6" open={expanded[team.id] ?? (index === 0)}>
               <summary
@@ -75,6 +77,7 @@ export default function ReferenceComparison({ teams }: Props) {
                   )}
                   <p className="text-base leading-7 text-foreground mb-3"><strong>Por qué esta referencia tiene sentido:</strong> {reference.explanation}</p>
                   <p className="text-base leading-7 text-foreground mb-6"><strong>Límites que no se pueden ignorar:</strong> {reference.caution}</p>
+                  {team.challenge && climateSources[team.challenge.id] && <p className="mb-5 text-sm text-muted-foreground"><a className="underline" href={climateSources[team.challenge.id]} target="_blank" rel="noreferrer">Referencia científica del mecanismo biológico (no valida la aplicación aeronáutica)</a></p>}
                   <div className="space-y-4">
                     {referenceLabels.map(({ key, label }) => (
                       <div key={key} className="rounded-xl border border-border overflow-hidden">
@@ -112,11 +115,11 @@ export default function ReferenceComparison({ teams }: Props) {
                       ))}
                     </div>
                     <div className="mt-5 border-t border-border pt-4">
-                      <p className="text-lg font-semibold">{count}/4 criterios marcados por el equipo</p>
+                      <p className="text-lg font-semibold">{count}/{total} criterios marcados por el equipo</p>
                       <p className="text-base text-muted-foreground leading-7 mt-1">
-                        {count === 4
-                          ? "Habéis identificado los cuatro criterios en vuestra propuesta. Comprobad su evidencia: no supone validación técnica."
-                          : `Quedan ${4 - count} criterios sin marcar. Revisad el lienzo o anotad qué información y ensayos necesitaríais para completarlos.`}
+                        {count === total
+                          ? "Habéis identificado todos los criterios en vuestra propuesta. Comprobad su evidencia: no supone validación técnica."
+                          : `Quedan ${total - count} criterios sin marcar. Revisad el lienzo o anotad qué información y ensayos necesitaríais para completarlos.`}
                       </p>
                     </div>
                   </div>
