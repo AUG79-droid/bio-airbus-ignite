@@ -1,5 +1,5 @@
 import { referenceSolutions } from "@/data/reference-solutions";
-import { PilotAssessment, usesHubAssessment } from "@/components/biolab/PilotAssessment";
+import { PilotAssessment } from "@/components/biolab/PilotAssessment";
 import { challengeTrack } from "@/data/resilience-expansion";
 import { useState } from "react";
 import { motion } from "framer-motion";
@@ -210,8 +210,7 @@ export default function ResultsScreen({ onRestart }: ResultsScreenProps) {
 
         <ReferenceComparison teams={sorted} />
         {teams.filter(team=>challengeTrack(team.challenge?.id)!=="general").map(team=>{const ref=team.challenge?referenceSolutions[team.challenge.id]:undefined;return <section key={team.id+"-transfer"} className="max-w-6xl mx-auto biolab-card mb-6"><h2 className="text-xl font-display font-bold mb-3">Traslada el aprendizaje a tu actividad · {team.name}</h2><p className="mb-3"><strong>Ámbito profesional:</strong> {team.challenge?.area}</p><p className="mb-3"><strong>Qué podría evaluarse:</strong> {ref?.answer.benefit}</p><p className="mb-3"><strong>Siguiente paso profesional:</strong> {ref?.answer.implementation}</p><p className="text-sm text-muted-foreground">Usa esta referencia para plantear una conversación con el responsable de tu actividad. No es una recomendación de cambio autorizada.</p></section>;})}
-        {usesHubAssessment() && <section className="max-w-6xl mx-auto biolab-card mb-6"><h2 className="text-xl font-bold mb-3">Completa la evaluación del piloto</h2><p>Vuelve a la pestaña del Sustainability Navigator desde la que abriste BioLab. Allí encontrarás la evaluación final y la encuesta de utilidad profesional.</p></section>}
-        {!usesHubAssessment() && teams.map(team=>{const track=challengeTrack(team.challenge?.id);return !team.challenge?null:<PilotAssessment key={team.id+track+team.challenge?.id} teamId={team.id} track={track} phase="post" challengeId={team.challenge?.id}/>;})}
+        {teams.map(team=>{const track=challengeTrack(team.challenge?.id);return !team.challenge?null:<PilotAssessment key={team.id+track+team.challenge?.id} teamId={team.id} track={track} phase="post" challengeId={team.challenge?.id}/>;})}
 
         <section className="max-w-6xl mx-auto biolab-callout mb-8">
           <strong>Interpretación responsable</strong>
