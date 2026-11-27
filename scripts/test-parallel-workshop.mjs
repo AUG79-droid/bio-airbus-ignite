@@ -34,6 +34,20 @@ try{
  assert.equal(await solo.getByRole("button",{name:es?"Innovación general (8 retos)":"General innovation (8 challenges)",exact:true}).count(),0);
  console.log("PASS: individual path, topic choices, original guide, single team, locked climate track.");
  await soloContext.close();
+ const previewContext=await browser.newContext();
+ const preview=await previewContext.newPage();
+ await preview.goto(origin+base+"?assessment=pre&track=climate");
+ await preview.getByTestId("initial-assessment").waitFor();
+ for(const field of await preview.locator("fieldset").all())await field.locator("input[type=radio]").first().check();
+ await preview.getByTestId("correct-assessment").click();
+ await preview.getByTestId("initial-score").waitFor();
+ assert.equal(await preview.locator('[data-testid^="feedback-"]').count(),4);
+ assert.equal(await preview.evaluate(()=>Object.keys(localStorage).filter(k=>k.startsWith("biolab-pilot")).length),0);
+ await preview.getByRole("link",{name:"Preguntas finales",exact:true}).click();
+ await preview.getByTestId("final-assessment").waitFor();
+ assert.equal(await preview.locator("fieldset").count(),4);
+ assert.equal(await preview.getByTestId("initial-assessment").count(),0);
+ await previewContext.close();
  const errors=[];
  for(const p of [host,...players]){p.on("pageerror",e=>errors.push(e.message));p.on("dialog",d=>d.accept());p.setDefaultTimeout(15000);}
  await host.goto(origin+base);
