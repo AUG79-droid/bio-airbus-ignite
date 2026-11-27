@@ -48,6 +48,12 @@ try{
  await host.getByTestId("competition-entry").click();
  await host.getByTestId("host-guide").waitFor();
  await host.getByTestId("guide-next").click();
+ await host.getByTestId("role-help").waitFor();
+ assert.match(await host.getByTestId("host").innerText(),/Crear un taller nuevo|Create a new workshop/);
+ assert.equal(await host.getByTestId("saved-workshop").count(),0);
+ await host.getByTestId("join-entry").click();
+ assert.equal(await host.getByPlaceholder("BL1-…").count(),1);
+ await host.getByRole("button",{name:es?"Volver":"Back",exact:true}).click();
  await host.getByTestId("host").click();
  assert.match(await host.getByTestId("host-track").innerText(),/Adaptación climática|Climate adaptation/i);
  assert.equal(await host.getByTestId("track").count(),0);
@@ -112,6 +118,8 @@ try{
  assert.match(ranking,/1\. (Team|Equipo) 3 · 25\/25/);
  assert.match(ranking,/3\. (Team|Equipo) 2 · 20\/25/);
  await host.reload();
+ await host.getByTestId("saved-workshop").waitFor();
+ assert.match(await host.getByTestId("host").innerText(),/Retomar taller guardado|Resume saved workshop/);
  await host.getByTestId("host").click();
  await host.getByTestId("ranking").waitFor();
  assert.equal(await host.getByTestId("session-code").inputValue(),code);
