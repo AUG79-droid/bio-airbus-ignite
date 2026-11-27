@@ -23,7 +23,7 @@ export const CLIMATE_CHALLENGES: Challenge[] = [
     "title": "Limitar daños de impacto ante granizo",
     "area": "Materiales y durabilidad",
     "description": "Ante una exposición futura hipotética a granizo, explora una arquitectura multicapa en una probeta de panel no crítico. No extrapoles a resistencia de aeronaves frente a tormentas."
-  }
+  },
   ...EXTRA_CLIMATE,
 ];
 export const climateReferenceSolutions: Record<string, ReferenceSolution> = {
