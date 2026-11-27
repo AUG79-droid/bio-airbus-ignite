@@ -1,5 +1,5 @@
 import { useState, useLayoutEffect } from "react";
-import { setPreferredTrack, preferredTrack } from "@/components/biolab/PilotAssessment";
+import { setPreferredTrack, preferredTrack, PilotAssessment } from "@/components/biolab/PilotAssessment";
 import { challengeTrack, type Track } from "@/data/resilience-expansion";
 import Workshop from "@/components/biolab/Workshop";
 import { BioLabProvider, useBioLab, IS_DEMO_MODE } from "@/contexts/BioLabContext";
@@ -110,6 +110,17 @@ function BioLabApp() {
 
 export default function Index() {
   const query=new URLSearchParams(window.location.search);
+  const phase=query.get("assessment");
+  if(phase==="pre"||phase==="post"){
+    const requested=query.get("track");
+    const track:Track=requested==="general"||requested==="resilience"?requested:"climate";
+    return <div className="min-h-screen bg-background biolab-grid-pattern py-8 px-4">
+      <header className="max-w-6xl mx-auto biolab-card"><a href={import.meta.env.BASE_URL} className="biolab-btn-ghost">← BioLab</a><h1 className="font-display text-2xl font-bold mt-3">Vista de revisión · evaluaciones</h1><p className="my-3">Acceso directo a las preguntas reales del juego, sin iniciar un taller ni guardar respuestas de prueba.</p>
+      <div className="flex flex-wrap gap-2 mb-4">{([["general","Innovación general"],["climate","Adaptación climática"],["resilience","Resiliencia estratégica"]] as const).map(([id,label])=><a key={id} className={track===id?"biolab-btn-primary":"biolab-btn-ghost border"} href={"?assessment="+phase+"&track="+id}>{label}</a>)}</div>
+      <div className="flex flex-wrap gap-2"><a className={phase==="pre"?"biolab-btn-accent":"biolab-btn-ghost border"} href={"?assessment=pre&track="+track}>Preguntas iniciales</a><a className={phase==="post"?"biolab-btn-accent":"biolab-btn-ghost border"} href={"?assessment=post&track="+track}>Preguntas finales</a><button className="biolab-btn-ghost border" onClick={()=>window.location.reload()}>Reiniciar preguntas</button></div></header>
+      <PilotAssessment key={track+phase} teamId="assessment-preview" track={track} phase={phase} preview/>
+    </div>;
+  }
   if(query.get('workshop')==='1'&&(query.has('code')||['general','climate','resilience'].includes(query.get('track')??'')))return <Workshop/>;
   return (
     <BioLabProvider>
