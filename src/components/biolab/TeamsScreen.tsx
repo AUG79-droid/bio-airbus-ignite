@@ -14,7 +14,7 @@ export default function TeamsScreen({ onNext, onBack }: TeamsScreenProps) {
   const [selectedColor, setSelectedColor] = useState(0);
 
   const handleAdd = () => {
-    if (newName.trim()) {
+    if (newName.trim() && teams.length === 0) {
       addTeam(newName.trim(), selectedColor);
       setNewName("");
       setSelectedColor((selectedColor + 1) % TEAM_COLORS.length);
@@ -27,10 +27,10 @@ export default function TeamsScreen({ onNext, onBack }: TeamsScreenProps) {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
           <span className="biolab-phase mb-5 inline-flex">Etapa 01</span>
           <h2 className="biolab-section-title mb-3">Configuración de equipos</h2>
-          <p className="biolab-subtitle">Crea uno o varios equipos para el ejercicio. Si estás probando la aplicación por tu cuenta, también puedes crear un único equipo.</p>
+          <p className="biolab-subtitle">Crea un equipo para trabajar individualmente o en grupo. Para varios equipos simultáneos, utiliza el modo competición.</p>
         </motion.div>
 
-        <div className="max-w-xl mx-auto">
+        <div className="max-w-xl mx-auto"><a href="?workshop=1" className="biolab-btn-ghost mb-4">¿Varios equipos? Abrir modo competición</a>{teams.length>1&&<p className="mb-4 text-sm">Esta sesión anterior contiene varios equipos. Conserva el equipo con el que quieras continuar o usa el modo competición.</p>}
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="biolab-card mb-8">
             <label className="biolab-label block mb-3">Nombre del equipo</label>
             <div className="flex gap-3">
@@ -42,7 +42,7 @@ export default function TeamsScreen({ onNext, onBack }: TeamsScreenProps) {
                 placeholder="Ej.: Ala Biónica, Equipo Geco, ThermoLab..."
                 className="biolab-input flex-1 text-base"
               />
-              <button onClick={handleAdd} className="biolab-btn-primary shrink-0 px-6 py-3">
+              <button onClick={handleAdd} disabled={teams.length>0} className="biolab-btn-primary shrink-0 px-6 py-3">
                 Añadir
               </button>
             </div>
@@ -98,7 +98,7 @@ export default function TeamsScreen({ onNext, onBack }: TeamsScreenProps) {
 
         <div className="flex justify-center gap-4 mt-12">
           <button onClick={onBack} className="biolab-btn-ghost">← Volver</button>
-          <button onClick={onNext} className="biolab-btn-primary" disabled={teams.length === 0}>
+          <button onClick={onNext} className="biolab-btn-primary" disabled={teams.length !== 1}>
             Asignar retos
             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
           </button>

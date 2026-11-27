@@ -1,3 +1,4 @@
+import Workshop from "@/components/biolab/Workshop";
 import { BioLabProvider, useBioLab, IS_DEMO_MODE } from "@/contexts/BioLabContext";
 import BioLabNav from "@/components/biolab/BioLabNav";
 import BioLabGuide from "@/components/biolab/BioLabGuide";
@@ -89,6 +90,7 @@ function BioLabApp() {
 }
 
 export default function Index() {
+  if(new URLSearchParams(window.location.search).get('workshop')==='1')return <Workshop/>;
   return (
     <BioLabProvider>
       <BioLabApp />
