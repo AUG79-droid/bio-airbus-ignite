@@ -61,6 +61,7 @@ export default function ChallengeRoulette({ onNext, onBack }: ChallengeRouletteP
   }, [isSpinning, pool, angleStep]);
 
   const handleConfirm = () => {
+    if (activeTeam?.challenge && activeTeam.challenge.id !== challenge.id && !window.confirm("Cambiar de reto borrará el modelo, el lienzo y la presentación del equipo activo. ¿Quieres continuar?")) return;
     setTeamChallenge(challenge);
     onNext();
   };
