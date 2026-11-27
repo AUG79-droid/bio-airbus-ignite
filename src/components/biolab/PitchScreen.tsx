@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { useBioLab } from "@/contexts/BioLabContext";
 import { isCanvasEntryReady, isObviousFillerText, isPitchTitleReady, isPitchSummaryReady } from "@/data/biolab-data";
@@ -9,6 +10,8 @@ interface PitchScreenProps {
 
 export default function PitchScreen({ onNext, onBack }: PitchScreenProps) {
   const { activeTeam, activeTeamIndex, teams, updatePitch, setActiveTeam, isPitchComplete } = useBioLab();
+  const [pendingDraft,setPendingDraft]=useState<{teamId:string; text:string}|null>(null);
+  const [draftStatus,setDraftStatus]=useState<{teamId:string; text:string}|null>(null);
   if (!activeTeam) return null;
 
   const challenge = activeTeam.challenge;
@@ -38,18 +41,31 @@ export default function PitchScreen({ onNext, onBack }: PitchScreenProps) {
     else onNext();
   };
 
-  const suggestedPitch = [
-    canvas.problem && `Estamos abordando ${canvas.problem}`,
-    organism?.name && organism?.principle && `Nos inspiramos en ${organism.name}, que realiza esta función mediante ${organism.principle.toLowerCase()}`,
-    canvas.solution && `Proponemos ${canvas.solution}`,
-    canvas.benefit && `Esto permitiría ${canvas.benefit}`,
-    canvas.implementation && `El primer paso sería ${canvas.implementation}`,
-  ]
-    .filter(Boolean)
-    .join(". ");
-
+  const draftFields = [
+    ["problem","Problema"],
+    ["organism","Inspiración natural"],
+    ["principle","Principio transferido"],
+    ["solution","Solución propuesta"],
+    ["benefit","Beneficio hipotético"],
+    ["implementation","Primera prueba"],
+  ] as const;
+  const writeDraft = (text:string) => {
+    updatePitch(activeTeam.pitchTitle,text);
+    setPendingDraft(null);
+    setDraftStatus({teamId:activeTeam.id,text:"Borrador creado en el cuadro de presentación. Revísalo, edítalo y redúcelo a unos 60 segundos."});
+  };
   const draftPitch = () => {
-    if (!activeTeam.pitchSummary.trim()) updatePitch(activeTeam.pitchTitle, suggestedPitch);
+    setDraftStatus(null);
+    const missing=draftFields.filter(([field])=>!isCanvasEntryReady(field,canvas[field]));
+    if(missing.length){
+      setPendingDraft(null);
+      setDraftStatus({teamId:activeTeam.id,text:"Antes de crear el borrador, vuelve al lienzo y completa o corrige: "+missing.map(([,label])=>label).join(", ")+"."});
+      return;
+    }
+    const text=draftFields.map(([field,label])=>label+": "+canvas[field].trim()).join("\n\n");
+    if(activeTeam.pitchSummary.trim()){
+      setPendingDraft({teamId:activeTeam.id,text});
+    }else writeDraft(text);
   };
 
   return (
@@ -193,7 +209,7 @@ export default function PitchScreen({ onNext, onBack }: PitchScreenProps) {
               </div>
               <textarea
                 value={activeTeam.pitchSummary}
-                onChange={(e) => updatePitch(activeTeam.pitchTitle, e.target.value)}
+                onChange={(e) => {updatePitch(activeTeam.pitchTitle, e.target.value);setPendingDraft(null);setDraftStatus(null);}}
                 placeholder="Resume con tus palabras qué problema resolvéis, qué mecanismo natural os inspira, qué solución proponéis, qué esperáis mejorar y cómo comprobaríais si funciona."
                 rows={8}
                 className="biolab-input resize-y text-base leading-relaxed"
@@ -201,17 +217,18 @@ export default function PitchScreen({ onNext, onBack }: PitchScreenProps) {
               <div className="mt-4 flex flex-wrap items-center gap-3">
                 <button
                   type="button"
-                  className="biolab-btn-ghost border border-primary/25"
-                  disabled={Boolean(activeTeam.pitchSummary.trim())}
+                  className="biolab-btn-primary"
+                  data-testid="create-pitch-draft"
                   onClick={draftPitch}
                 >
                   Crear borrador editable con mis seis respuestas
                 </button>
                 <p className="text-sm text-muted-foreground">
-                  Este botón solo prepara un borrador con <strong>lo que tu equipo ya escribió</strong>.
-                  No sustituye una revisión técnica.
+                  Recupera tus seis respuestas del lienzo y las coloca en el cuadro de presentación. Si ya hay texto, te pide permiso antes de sustituirlo. Revisa y resume el borrador: no es una evaluación técnica.
                 </p>
               </div>
+              {pendingDraft?.teamId===activeTeam.id&&<div className="mt-4 rounded-xl border border-amber-400 bg-amber-50 text-amber-950 p-4" data-testid="draft-confirm"><p className="font-semibold">Ya hay texto en la presentación. ¿Quieres sustituirlo por el borrador de tus seis respuestas?</p><div className="flex flex-wrap gap-3 mt-3"><button type="button" data-testid="replace-pitch-draft" className="biolab-btn-accent" onClick={()=>writeDraft(pendingDraft.text)}>Sustituir texto por borrador</button><button type="button" data-testid="cancel-pitch-draft" className="biolab-btn-ghost" onClick={()=>{setPendingDraft(null);setDraftStatus({teamId:activeTeam.id,text:"Se ha conservado tu texto original."});}}>Conservar mi texto</button></div></div>}
+              {draftStatus?.teamId===activeTeam.id&&<p role="status" data-testid="draft-status" className="mt-3 rounded-lg border bg-muted/60 p-3 text-sm font-medium">{draftStatus.text}</p>}
             </motion.div>
 
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="biolab-card-dark py-5 px-5">
