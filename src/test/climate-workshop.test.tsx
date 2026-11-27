@@ -21,8 +21,6 @@ describe("Climate workshop integration", () => {
  render(<BioLabProvider><ChallengeRoulette onNext={next} onBack={vi.fn()}/></BioLabProvider>);
  fireEvent.click(screen.getByRole("button",{name:/(Laboratorio de resiliencia climática)/i}));
  fireEvent.click(screen.getByRole("button",{name:CLIMATE_CHALLENGES[0].title}));
- for(const field of screen.getAllByRole("group").filter(f=>f.querySelector('input[type="radio"]'))) {const radio=field.querySelector('input[type="radio"]');if(radio)fireEvent.click(radio);}
- const save=screen.getByRole("button",{name:"Guardar evaluación"});fireEvent.click(save);
  const confirm=await screen.findByRole("button",{name:/^Confirmar reto$/i});
  fireEvent.click(confirm);expect(next).not.toHaveBeenCalled();expect(JSON.parse(window.localStorage.getItem(storage)!).teams[0].challenge.id).toBe("c1");
  fireEvent.click(confirm);expect(next).toHaveBeenCalledTimes(1);
