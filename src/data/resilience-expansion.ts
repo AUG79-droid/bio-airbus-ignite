@@ -216,7 +216,7 @@ export const expansionReferences: Record<string,ReferenceSolution> = {
     "answer": {
       "problem": "Comparar un conjunto de ensayo con acceso limitado frente a una alternativa desmontable de función equivalente.",
       "organism": "La microestructura de sus dedos permite adhesión reversible mediante interacciones superficiales.",
-      "principle": "Adhesión reversible",
+      "principle": "Estudiar la adhesión reversible para desacoplar la función de fijación de la sustitución del conjunto y comprobar su repetibilidad.",
       "solution": "Investigar un concepto de fijación reversible en banco, preservando interfaces y requisitos de inspección.",
       "benefit": "Medir tiempo de desmontaje, daños y repetibilidad; estudiar masa y mantenimiento.",
       "implementation": "Ingeniería y Mantenimiento: verificar criterios mecánicos, ciclos de uso y condiciones de rechazo en laboratorio."
