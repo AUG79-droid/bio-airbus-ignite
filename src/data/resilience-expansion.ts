@@ -247,7 +247,7 @@ export const EXTRA_MODELS: Organism[] = [
     "strategy": "Sus pelos especializados reflejan parte de la radiación solar y favorecen la emisión térmica infrarroja.",
     "principle": "Reflexión solar y emisión térmica",
     "fact": "La respuesta depende del espectro, orientación, entorno y degradación; no garantiza refrigeración.",
-    "image": "o11.svg"
+    "image": "o11-photo.jpg"
   },
   {
     "id": "o12",
@@ -255,7 +255,7 @@ export const EXTRA_MODELS: Organism[] = [
     "strategy": "La geometría de su superficie ha inspirado investigaciones sobre erosión por arena.",
     "principle": "Gestión del impacto de partículas",
     "fact": "El resultado depende del material, la trayectoria de partículas y las condiciones; una textura no es universalmente resistente.",
-    "image": "o12.svg"
+    "image": "o12-photo.jpg"
   },
   {
     "id": "o13",
@@ -263,7 +263,7 @@ export const EXTRA_MODELS: Organism[] = [
     "strategy": "Las capas de las escamas cambian de dimensiones de forma desigual con la humedad, provocando movimiento.",
     "principle": "Respuesta higroscópica diferencial",
     "fact": "Humedad no equivale a lluvia o condensación; la respuesta puede ser lenta, irreversible o dependiente de temperatura.",
-    "image": "o13.svg"
+    "image": "o13-photo.jpg"
   },
   {
     "id": "o14",
@@ -271,7 +271,7 @@ export const EXTRA_MODELS: Organism[] = [
     "strategy": "La microestructura de las plumas contribuye al aislamiento del recubrimiento.",
     "principle": "Aislamiento mediante estructura y aire retenido",
     "fact": "El aislamiento puede perder eficacia al humedecerse y no resuelve por sí solo hielo, combustible ni seguridad energética.",
-    "image": "o14.svg"
+    "image": "o14-photo.jpg"
   },
   {
     "id": "o15",
@@ -279,7 +279,7 @@ export const EXTRA_MODELS: Organism[] = [
     "strategy": "Este moho mucilaginoso reorganiza redes de transporte entre fuentes de alimento; se ha estudiado su eficiencia y tolerancia a fallos.",
     "principle": "Redes adaptativas y redundancia",
     "fact": "Una red biológica no acredita independencia de proveedores, calidad, capacidad ni plazos.",
-    "image": "o15.svg"
+    "image": "o15-photo.jpg"
   },
   {
     "id": "o16",
@@ -287,7 +287,7 @@ export const EXTRA_MODELS: Organism[] = [
     "strategy": "Algunas plantas sellan heridas mediante exudados o cambios mecánicos; la reparación posterior puede ser distinta.",
     "principle": "Autosellado y reparación funcional",
     "fact": "Sellar una grieta no demuestra restauración de resistencia o aeronavegabilidad; puede ocultar daños.",
-    "image": "o16.svg"
+    "image": "o16-photo.jpg"
   }
 ].map(o=>({...o,image:import.meta.env.BASE_URL+"images/nature/"+o.image}));
 export const challengeTrack = (id?: string) => id && STRATEGIC_CHALLENGES.some(c=>c.id===id) ? "resilience" : id && /^(c9|c10|c11|c12|c13|c14|c15)$/.test(id) ? "climate" : "general";
