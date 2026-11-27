@@ -27,9 +27,11 @@ const BIOMIMICRY_RULES = [
 interface HowItWorksScreenProps {
   onNext: () => void;
   onBack: () => void;
+  competition?: boolean;
+  nextLabel?: string;
 }
 
-export default function HowItWorksScreen({ onNext, onBack }: HowItWorksScreenProps) {
+export default function HowItWorksScreen({ onNext, onBack, competition=false, nextLabel }: HowItWorksScreenProps) {
   return (
     <div className="min-h-screen flex flex-col justify-center py-20 biolab-grid-pattern">
       <div className="biolab-container">
@@ -56,7 +58,7 @@ export default function HowItWorksScreen({ onNext, onBack }: HowItWorksScreenPro
                 </div>
                 <div>
                   <h3 className="text-base font-semibold font-display text-foreground mb-1">{step.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{step.description}</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{competition&&step.number===1?"Cada equipo trabaja desde su propio ordenador con el número asignado.":competition&&step.number===2?"El organizador gira la ruleta una vez; todos comparten exactamente el mismo reto.":competition&&step.number===6?"Entrega tu propuesta y comparad todas con la misma rúbrica.":step.description}</p>
                 </div>
               </div>
             </motion.div>
@@ -125,8 +127,8 @@ export default function HowItWorksScreen({ onNext, onBack }: HowItWorksScreenPro
 
         <div className="flex justify-center gap-4">
           <button onClick={onBack} className="biolab-btn-ghost">← Volver</button>
-          <button onClick={onNext} className="biolab-btn-primary">
-            Formar los equipos
+          <button data-testid="guide-next" onClick={onNext} className="biolab-btn-primary">
+            {nextLabel??"Formar los equipos"}
             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
           </button>
         </div>
