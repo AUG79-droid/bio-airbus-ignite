@@ -1,3 +1,4 @@
+import { EXTRA_CLIMATE, expansionReferences, expansionSources } from "./resilience-expansion";
 import type { Challenge } from "./biolab-data";
 import type { ReferenceSolution } from "./reference-solutions";
 // Fictional educational exercises, not real aircraft performance or approved engineering.
@@ -23,8 +24,10 @@ export const CLIMATE_CHALLENGES: Challenge[] = [
     "area": "Materiales y durabilidad",
     "description": "Ante una exposición futura hipotética a granizo, explora una arquitectura multicapa en una probeta de panel no crítico. No extrapoles a resistencia de aeronaves frente a tormentas."
   }
+  ...EXTRA_CLIMATE,
 ];
 export const climateReferenceSolutions: Record<string, ReferenceSolution> = {
+  ...expansionReferences,
   "c9": {
     "recommendedModel": "Termitero",
     "mechanism": "En ciertas especies, las oscilaciones térmicas diarias impulsan la ventilación.",
@@ -90,6 +93,7 @@ export const climateReferenceSolutions: Record<string, ReferenceSolution> = {
   }
 };
 export const climateSources: Record<string,string> = {
+  ...expansionSources,
   "c9": "https://pubmed.ncbi.nlm.nih.gov/26316023/",
   "c10": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10753341/",
   "c11": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5090675/"
