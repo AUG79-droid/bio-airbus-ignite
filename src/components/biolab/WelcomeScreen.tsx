@@ -1,4 +1,4 @@
-import { setPreferredTrack } from "@/components/biolab/PilotAssessment";
+import { setPreferredTrack, usesHubAssessment } from "@/components/biolab/PilotAssessment";
 import { motion } from "framer-motion";
 interface WelcomeScreenProps {
   onNext: () => void;
@@ -102,7 +102,7 @@ export default function WelcomeScreen({ onNext }: WelcomeScreenProps) {
             <div className="rounded-xl border border-white/20 p-4"><h3 className="text-xl font-bold">Adaptación climática</h3><p className="mt-2 mb-4 text-slate-200">Identifica vulnerabilidades físicas futuras y formula ideas de adaptación verificables. 7 retos.</p><button className="biolab-btn-accent" onClick={()=>{setPreferredTrack("climate");onNext();}}>Empezar adaptación climática</button></div>
             <div className="rounded-xl border border-white/20 p-4"><h3 className="text-xl font-bold">Resiliencia estratégica</h3><p className="mt-2 mb-4 text-slate-200">Explora dependencias, recuperación, coordinación y longevidad. 4 retos.</p><button className="biolab-btn-accent" onClick={()=>{setPreferredTrack("resilience");onNext();}}>Empezar resiliencia estratégica</button></div>
           </div>
-          <p className="text-sm text-slate-300 mt-3">Duración orientativa: 25–40 min por reto. Evaluación inicial y final; exportación voluntaria de datos de aprendizaje sin nombre.</p>
+          <p className="text-sm text-slate-300 mt-3">{usesHubAssessment()?"Duración orientativa: 25–40 min por reto. Las evaluaciones del piloto están en la pestaña del Sustainability Navigator.":"Duración orientativa: 25–40 min por reto. Evaluación inicial y final; exportación voluntaria de datos de aprendizaje sin nombre."}</p>
         </section>
         <div className="text-center mb-12">
           <p className="text-sm max-w-2xl mx-auto mb-6" style={{ color: "hsl(210, 15%, 58%)" }}>
