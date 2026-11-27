@@ -1,4 +1,6 @@
-import { useState, useLayoutEffect } from "react";
+import { RESET_NOTICE, returnToCover, resetBioLab } from "@/data/reset-biolab";
+import ResetBioLabButton from "@/components/biolab/ResetBioLabButton";
+import { useState, useLayoutEffect, useEffect } from "react";
 import { setPreferredTrack, preferredTrack, PilotAssessment } from "@/components/biolab/PilotAssessment";
 import { challengeTrack, type Track } from "@/data/resilience-expansion";
 import Workshop from "@/components/biolab/Workshop";
@@ -45,7 +47,7 @@ function BioLabApp() {
     <BioCanvasScreen onNext={nextScreen} onBack={prevScreen} />,
     <PitchScreen onNext={nextScreen} onBack={prevScreen} />,
     <VotingScreen onNext={nextScreen} onBack={prevScreen} />,
-    <ResultsScreen onRestart={resetSession} />,
+    <ResultsScreen onRestart={demo?resetSession:resetBioLab} />,
   ];
 
   return (
@@ -109,6 +111,7 @@ function BioLabApp() {
 }
 
 export default function Index() {
+  useEffect(()=>{const onReset=(event:StorageEvent)=>{if(event.key===RESET_NOTICE&&event.newValue!==null)returnToCover();};window.addEventListener("storage",onReset);return()=>window.removeEventListener("storage",onReset);},[]);
   const query=new URLSearchParams(window.location.search);
   const phase=query.get("assessment");
   if(phase==="pre"||phase==="post"){
@@ -117,7 +120,7 @@ export default function Index() {
     return <div className="min-h-screen bg-background biolab-grid-pattern py-8 px-4">
       <header className="max-w-6xl mx-auto biolab-card"><a href={import.meta.env.BASE_URL} className="biolab-btn-ghost">← BioLab</a><h1 className="font-display text-2xl font-bold mt-3">Vista de revisión · evaluaciones</h1><p className="my-3">Acceso directo a las preguntas reales del juego, sin iniciar un taller ni guardar respuestas de prueba.</p>
       <div className="flex flex-wrap gap-2 mb-4">{([["general","Innovación general"],["climate","Adaptación climática"],["resilience","Resiliencia estratégica"]] as const).map(([id,label])=><a key={id} className={track===id?"biolab-btn-primary":"biolab-btn-ghost border"} href={"?assessment="+phase+"&track="+id}>{label}</a>)}</div>
-      <div className="flex flex-wrap gap-2"><a className={phase==="pre"?"biolab-btn-accent":"biolab-btn-ghost border"} href={"?assessment=pre&track="+track}>Preguntas iniciales</a><a className={phase==="post"?"biolab-btn-accent":"biolab-btn-ghost border"} href={"?assessment=post&track="+track}>Preguntas finales</a><button className="biolab-btn-ghost border" onClick={()=>window.location.reload()}>Reiniciar preguntas</button></div></header>
+      <div className="flex flex-wrap gap-2"><a className={phase==="pre"?"biolab-btn-accent":"biolab-btn-ghost border"} href={"?assessment=pre&track="+track}>Preguntas iniciales</a><a className={phase==="post"?"biolab-btn-accent":"biolab-btn-ghost border"} href={"?assessment=post&track="+track}>Preguntas finales</a><button className="biolab-btn-ghost border" onClick={()=>window.location.reload()}>Reiniciar preguntas</button><ResetBioLabButton/></div></header>
       <PilotAssessment key={track+phase} teamId="assessment-preview" track={track} phase={phase} preview/>
     </div>;
   }

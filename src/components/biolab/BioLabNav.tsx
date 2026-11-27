@@ -1,5 +1,6 @@
+import ResetBioLabButton from "./ResetBioLabButton";
 import { motion } from "framer-motion";
-import { Check, ChevronDown, LockKeyhole, RotateCcw, Save } from "lucide-react";
+import { Check, ChevronDown, LockKeyhole, Save } from "lucide-react";
 import { useBioLab } from "@/contexts/BioLabContext";
 
 const SCREEN_LABELS = [
@@ -24,19 +25,12 @@ export default function BioLabNav() {
     setActiveTeam,
     teams,
     canAccessScreen,
-    resetSession,
   } = useBioLab();
 
   if (currentScreen === 0) return null;
 
   const completedStages = Math.max(0, currentScreen - 1);
   const progress = Math.min((currentScreen / 9) * 100, 100);
-
-  const handleReset = () => {
-    if (window.confirm("¿Quieres iniciar una sesión nueva? Se eliminarán los equipos y todo el trabajo guardado en este dispositivo.")) {
-      resetSession();
-    }
-  };
 
   return (
     <motion.nav
@@ -129,9 +123,7 @@ export default function BioLabNav() {
             </div>
           )}
 
-          <button onClick={handleReset} className="biolab-icon-btn" title="Iniciar una sesión nueva" aria-label="Iniciar una sesión nueva">
-            <RotateCcw className="h-4 w-4" />
-          </button>
+          <ResetBioLabButton/>
 
           <div className="hidden lg:block w-28" aria-label={`${completedStages} etapas completadas`}>
             <div className="flex justify-between mb-1 text-xs font-mono text-slate-700">
