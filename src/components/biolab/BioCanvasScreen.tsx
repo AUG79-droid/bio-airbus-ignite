@@ -1,4 +1,4 @@
-import { CLIMATE_CHALLENGES } from "@/data/climate-challenges";
+import { challengeTrack } from "@/data/resilience-expansion";
 import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { useBioLab } from "@/contexts/BioLabContext";
@@ -160,10 +160,11 @@ export default function BioCanvasScreen({ onNext, onBack }: BioCanvasScreenProps
           </div>
         </section>
 
-        {CLIMATE_CHALLENGES.some(item => item.id === challenge?.id) && <section className="max-w-6xl mx-auto biolab-card mb-6" aria-label="Guía de adaptación climática">
+        {challengeTrack(challenge?.id) === "climate" && <section className="max-w-6xl mx-auto biolab-card mb-6" aria-label="Guía de adaptación climática">
           <h2 className="text-xl font-display font-bold mb-3">Qué debe demostrar tu propuesta climática</h2>
           <p className="text-base text-muted-foreground leading-7">En las seis respuestas, identifica una amenaza física futura, el elemento expuesto y su vulnerabilidad. Justifica el mecanismo biológico, delimita la función y compara la referencia con la propuesta bajo la misma exposición. Define indicadores, posibles efectos adversos y evidencias pendientes, incluida la revisión por especialistas. No confundas reducción de emisiones con adaptación ni declares una mejora operativa sin evidencia.</p>
         </section>}
+        {challengeTrack(challenge?.id) === "resilience" && <section className="max-w-6xl mx-auto biolab-card mb-6"><h2 className="text-xl font-bold mb-3">Tu contribución profesional a la resiliencia</h2><p className="leading-7">Identifica la función amenazada, la dependencia o fallo, su consecuencia y el mecanismo que podría preservar o recuperar la función. Explica qué actividad profesional modificarías, qué indicador compararías y qué evidencia necesita el responsable. No presupongas que redundancia, reparación o coordinación garantizan un beneficio.</p></section>}
         {suspectPair && (
           <section className="max-w-6xl mx-auto rounded-2xl border-2 border-amber-500 bg-amber-50 px-5 py-5 mb-6 text-slate-900" role="status">
             <h2 className="text-lg font-bold mb-2">Atención: esta conexión no está justificada todavía</h2>
