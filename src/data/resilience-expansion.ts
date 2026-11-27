@@ -109,12 +109,12 @@ export const expansionReferences: Record<string,ReferenceSolution> = {
     "caution": "Humedad no equivale a lluvia o condensación; la respuesta puede ser lenta, irreversible o dependiente de temperatura.",
     "explanation": "Un equipo de ensayo sufre cambios hipotéticos de humedad y ciclos de secado. Explora un indicador pasivo experimental para detectar exposición, sin sustituir sensores certificados.",
     "answer": {
-      "problem": "Comparar la detección de ciclos de humedad con una referencia instrumentada.",
+      "problem": "Detectar cambios de humedad en una carcasa experimental no crítica antes de que la exposición prolongada pueda degradar sus materiales, sin sustituir el sensor de referencia.",
       "organism": "Las capas de las escamas cambian de dimensiones de forma desigual con la humedad, provocando movimiento.",
-      "principle": "Respuesta higroscópica diferencial",
-      "solution": "Explorar un indicador de cambio dimensional en laboratorio, no usarlo como sistema de seguridad.",
-      "benefit": "Medir respuesta, repetibilidad, histéresis y falsas indicaciones en ciclos equivalentes.",
-      "implementation": "Materiales e Instrumentación: contrastar con un sensor de referencia, registrar temperatura y envejecimiento."
+      "principle": "Unir dos capas con distinta expansión higroscópica para que la absorción o pérdida de humedad produzca una curvatura observable.",
+      "solution": "Fabricar una tira experimental de dos capas con distinta sensibilidad a la humedad y fijarla por un extremo. El extremo libre desplaza una marca sobre una escala visual de exposición. Calibrarla frente a un higrómetro en una cámara de ensayo; no utilizarla como alarma de seguridad ni instalarla en una aeronave.",
+      "benefit": "Hipótesis: obtener una señal visual de exposición sin alimentación propia. Medir tiempo de respuesta, repetibilidad, histéresis y falsas indicaciones; comprobar si temperatura, envejecimiento o condensación alteran la señal.",
+      "implementation": "Materiales e Instrumentación: someter varias tiras a ciclos controlados de humedad y secado en una cámara, registrar curvatura y humedad de referencia a distintas temperaturas y repetir tras envejecimiento. Fijar previamente tolerancia y tiempo máximo de respuesta; descartar el concepto si no los cumple."
     },
     "check": [
       "¿Delimita amenaza o interrupción, exposición, vulnerabilidad y consecuencia?",
