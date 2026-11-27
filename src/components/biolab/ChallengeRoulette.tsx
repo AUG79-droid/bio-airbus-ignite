@@ -10,13 +10,14 @@ import { PilotAssessment, preferredTrack, hasBaseline } from "@/components/biola
 interface ChallengeRouletteProps {
   onNext: () => void;
   onBack: () => void;
+  lockedTrack?: Track;
 }
 
 const CHALLENGE_CODES = ["STR", "AERO", "OPS", "ACOU", "MAT", "LOG", "NDT", "AIR"];
 
-export default function ChallengeRoulette({ onNext, onBack }: ChallengeRouletteProps) {
+export default function ChallengeRoulette({ onNext, onBack, lockedTrack }: ChallengeRouletteProps) {
   const { setTeamChallenge, activeTeam } = useBioLab();
-  const [mode, setMode] = useState<Track>(() => activeTeam?.challenge ? challengeTrack(activeTeam.challenge.id) : preferredTrack());
+  const [mode, setMode] = useState<Track>(() => lockedTrack ?? (activeTeam?.challenge ? challengeTrack(activeTeam.challenge.id) : preferredTrack()));
   const pool = mode === "climate" ? CLIMATE_CHALLENGES : mode === "resilience" ? STRATEGIC_CHALLENGES : CHALLENGES;
   const codes = mode === "climate" ? ["HEAT","DUST","HAIL","SUN","EROS","HUM","COLD"] : mode === "resilience" ? ["NET","REPR","COOR","LIFE"] : CHALLENGE_CODES;
   const angleStep = 360 / pool.length;
@@ -90,11 +91,11 @@ export default function ChallengeRoulette({ onNext, onBack }: ChallengeRouletteP
         </motion.header>
 
         <section className="max-w-5xl mx-auto biolab-card mb-6" aria-label="Modalidad del taller">
-          <div className="flex flex-wrap gap-3">
+          {lockedTrack?<div data-testid="locked-track" className="font-bold text-lg">Temática elegida: {mode==="general"?"Innovación general":mode==="climate"?"Adaptación climática":"Resiliencia estratégica"} ({pool.length} retos)</div>:<div className="flex flex-wrap gap-3">
             <button type="button" aria-pressed={mode === "general"} disabled={isSpinning} onClick={() => chooseMode("general")} className={mode === "general" ? "biolab-btn-primary" : "biolab-btn-ghost"}>Innovación general (8 retos)</button>
             <button type="button" aria-pressed={mode === "climate"} disabled={isSpinning} onClick={() => chooseMode("climate")} className={mode === "climate" ? "biolab-btn-primary" : "biolab-btn-ghost"}>Laboratorio de resiliencia climática (7 retos)</button>
             <button type="button" aria-pressed={mode === "resilience"} disabled={isSpinning} onClick={() => chooseMode("resilience")} className={mode === "resilience" ? "biolab-btn-primary" : "biolab-btn-ghost"}>Laboratorio de resiliencia estratégica (4 retos)</button>
-          </div>
+          </div>}
           {mode !== "general" && <><p className="text-sm text-muted-foreground mt-4 leading-6">{mode === "climate" ? "Aprende a conectar amenazas físicas futuras con vulnerabilidades de producto y soporte. Calor, radiación, polvo, granizo, humedad y frío. No calcula prestaciones ni cubre toda la adaptación aeronáutica." : "Aprende cómo Compras, Ingeniería, Operaciones y Mantenimiento pueden reducir dependencias, preservar funciones y facilitar la recuperación. Los resultados son hipótesis de aprendizaje."}</p><div className="flex flex-wrap gap-2 mt-3">{pool.map((item,i)=><button key={item.id} type="button" disabled={isSpinning} aria-pressed={selected && currentIndex===i} className="biolab-btn-ghost" onClick={()=>{setCurrentIndex(i);setRotation(-i*angleStep);setSelected(true);}}>{item.title}</button>)}</div></>}
         </section>
         {activeTeam && <PilotAssessment key={activeTeam.id+mode} teamId={activeTeam.id} track={mode} phase="pre" />}

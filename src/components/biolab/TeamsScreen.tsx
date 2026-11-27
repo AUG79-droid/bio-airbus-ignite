@@ -27,10 +27,10 @@ export default function TeamsScreen({ onNext, onBack }: TeamsScreenProps) {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
           <span className="biolab-phase mb-5 inline-flex">Etapa 01</span>
           <h2 className="biolab-section-title mb-3">Configuración de equipos</h2>
-          <p className="biolab-subtitle">Crea un equipo para trabajar individualmente o en grupo. Para varios equipos simultáneos, utiliza el modo competición.</p>
+          <p className="biolab-subtitle">Crea un equipo para trabajar individualmente o en grupo. </p>
         </motion.div>
 
-        <div className="max-w-xl mx-auto"><a href="?workshop=1" className="biolab-btn-ghost mb-4">¿Varios equipos? Abrir modo competición</a>{teams.length>1&&<p className="mb-4 text-sm">Esta sesión anterior contiene varios equipos. Conserva el equipo con el que quieras continuar o usa el modo competición.</p>}
+        <div className="max-w-xl mx-auto">{teams.length>1&&<p className="mb-4 text-sm">Esta sesión anterior contiene varios equipos. Conserva el equipo con el que quieras continuar o usa el modo competición.</p>}
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="biolab-card mb-8">
             <label className="biolab-label block mb-3">Nombre del equipo</label>
             <div className="flex gap-3">
