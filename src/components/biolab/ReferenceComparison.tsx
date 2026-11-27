@@ -39,7 +39,7 @@ export default function ReferenceComparison({ teams }: Props) {
         {teams.map((team, index) => {
           const reference = team.challenge ? referenceSolutions[team.challenge.id] : undefined;
           const ticks = assessments[team.id] ?? [false, false, false, false];
-          const total = ref?.check.length ?? 4;
+          const total = reference?.check.length ?? 4;
           const count = ticks.slice(0, total).filter(Boolean).length;
           return (
             <details key={team.id} className="rounded-2xl border border-border bg-background/70 p-4 md:p-6" open={expanded[team.id] ?? (index === 0)}>
