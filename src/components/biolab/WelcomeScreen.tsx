@@ -98,9 +98,10 @@ export default function WelcomeScreen({ onNext }: WelcomeScreenProps) {
         <section className="max-w-5xl mx-auto mb-8 rounded-2xl bg-slate-950/80 border border-white/20 p-5 text-white">
           <h2 className="font-display text-2xl font-bold mb-2">Elige tu objetivo</h2>
           <p className="text-slate-200 mb-4">Puedes trabajar individualmente o en equipo. Sigue las instrucciones, resuelve un reto y compara tu propuesta con una referencia. No necesitas facilitador.</p>
-          <div className="grid md:grid-cols-2 gap-4">
-            <div className="rounded-xl border border-white/20 p-4"><h3 className="text-xl font-bold">Adaptación climática</h3><p className="mt-2 mb-4 text-slate-200">Identifica vulnerabilidades físicas futuras y formula ideas de adaptación verificables. 7 retos.</p><button className="biolab-btn-accent" onClick={()=>{setPreferredTrack("climate");onNext();}}>Empezar adaptación climática</button></div>
-            <div className="rounded-xl border border-white/20 p-4"><h3 className="text-xl font-bold">Resiliencia estratégica</h3><p className="mt-2 mb-4 text-slate-200">Explora dependencias, recuperación, coordinación y longevidad. 4 retos.</p><button className="biolab-btn-accent" onClick={()=>{setPreferredTrack("resilience");onNext();}}>Empezar resiliencia estratégica</button></div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="rounded-xl border border-white/20 p-4 flex flex-col"><h3 className="text-xl font-bold">Innovación general</h3><p className="mt-2 mb-4 text-slate-200 flex-1">Explora soluciones bioinspiradas para el diseño, las operaciones y el mantenimiento. 8 retos.</p><button type="button" className="biolab-btn-accent w-full justify-center text-center" onClick={()=>{setPreferredTrack("general");onNext();}}>Empezar innovación general</button></div>
+            <div className="rounded-xl border border-white/20 p-4 flex flex-col"><h3 className="text-xl font-bold">Adaptación climática</h3><p className="mt-2 mb-4 text-slate-200 flex-1">Identifica vulnerabilidades físicas futuras y formula ideas de adaptación verificables. 7 retos.</p><button type="button" className="biolab-btn-accent w-full justify-center text-center" onClick={()=>{setPreferredTrack("climate");onNext();}}>Empezar adaptación climática</button></div>
+            <div className="rounded-xl border border-white/20 p-4 flex flex-col"><h3 className="text-xl font-bold">Resiliencia estratégica</h3><p className="mt-2 mb-4 text-slate-200 flex-1">Explora dependencias, recuperación, coordinación y longevidad. 4 retos.</p><button type="button" className="biolab-btn-accent w-full justify-center text-center" onClick={()=>{setPreferredTrack("resilience");onNext();}}>Empezar resiliencia estratégica</button></div>
           </div>
           <p className="text-sm text-slate-300 mt-3">Duración orientativa: 25–40 min por reto. Evaluación inicial y final; exportación voluntaria de datos de aprendizaje sin nombre.</p>
         </section>
@@ -109,17 +110,6 @@ export default function WelcomeScreen({ onNext }: WelcomeScreenProps) {
             La biomímesis estudia cómo realizan sus funciones los sistemas vivos y traduce esas estrategias al diseño humano. Avanzarás desde la función hasta el mecanismo biológico, el principio de diseño, la aplicación y la validación.
           </p>
 
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={()=>{setPreferredTrack("general");onNext();}}
-            className="biolab-btn-accent text-lg px-14 py-5"
-          >
-            Entrar en el estudio de diseño
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-            </svg>
-          </motion.button>
         </div>
 
         <div className="max-w-3xl mx-auto mb-9 rounded-2xl border border-white/15 bg-black/30 backdrop-blur-md px-5 py-4 text-center">
