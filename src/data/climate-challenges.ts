@@ -37,7 +37,7 @@ export const climateReferenceSolutions: Record<string, ReferenceSolution> = {
       "problem": "Comparar una carcasa experimental no crítica con su referencia durante un episodio térmico hipotético, conservando función y acceso.",
       "organism": "Algunos termiteros aprovechan diferencias térmicas para mover aire e intercambiar gases.",
       "principle": "Gestionar intercambios térmicos y flujo; identificar cuándo el gradiente no es favorable.",
-      "solution": "Proponer una variante experimental y compararla con la referencia en condiciones equivalentes, sin modificar una aeronave real.",
+      "solution": "Diseñar una carcasa experimental con un canal de ventilación separado del equipo y una salida superior que aproveche la convección cuando el aire exterior sea más frío. Compararla con la carcasa original en una cámara térmica, manteniendo las restricciones de protección, mantenimiento y seguridad.",
       "benefit": "Hipótesis: menor exposición térmica. Medir temperatura máxima y tiempo fuera del criterio de ensayo; considerar masa y energía.",
       "implementation": "Ingeniería térmica, Sistemas y Mantenimiento deben definir exposición y criterios, comparar muestras y documentar resultados adversos y evidencias pendientes."
     },
